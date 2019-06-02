@@ -31,22 +31,9 @@ You then want to go to your log viewer application in Heroku, connect your logvi
 
 You can turn on auto-deploy for the master branch if you don't want to go through the process of logging into Heroku and deploying the branch every time changes to the repo are made in the future.
 
-## Discord Oauth2 setup
+## Discord Oauth2 
 
-To enable discord oauth support in order to log in via discord to view logs, you will need to set up a few more environment variables.
-
-- `GUILD_ID` - the guild id of your modmail inbox server, this is required so the server can check if a user has a whitelisted role.
-- `TOKEN` - Token of your modmail bot, required for the same reason as above.
-- `OAUTH2_CLIENT_ID` - The id of your bot.
-- `OAUTH2_CLIENT_SECRET` - Get this from the general information section of your bot app in the discord dev portal.
-<img src='https://i.imgur.com/YBavWlV.png' height=100>
-
-- `OAUTH2_REDIRECT_URI` - This will be equal to the url of your log viewer app + `/callback` e.g. `https://logwebsite.com/callback`. You will need to add this same url as a redirect url in the oauth2 section in the discord dev portal. 
-<img src='https://i.imgur.com/evZIWYN.png' height=100>
-
-Now you need to set up users or roles to whitelist access to your logs, do this via the `?oauth whitelist @user/role` command on your modmail bot. 
-
-This should enable whitelisted users to view logs while anyone else trying to access them will be rejected,
+Discord oauth2 support is a premium feature, only available to [Patrons](https://patreon.com/kyber).
 
 ## Contributing
 
