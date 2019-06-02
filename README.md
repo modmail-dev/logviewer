@@ -17,19 +17,9 @@ In order for you to view your selfhosted logs, you have to deploy this applicati
 
 ## Updating
 
-You can update the logviewer in your Heroku account whenever changes are made to this repo.
+You can automatically update the logviewer in your Heroku account whenever changes are made to this repo.
 
-**If you didn't fork this repo before**
-
-Fork the repo by clicking the Fork button at the top right of this page (must be on desktop site). Then on your Heroku account, go to the log viewer application, Deploy tab, and connect the repo named `yourusername/logviewer`. Do a manual deploy of the master branch.
-
-**If you forked this repo before**
-
-[Click here to create a new pull request to your fork](https://github.com/kyb3r/logviewer/pull/new/master). Select compare across forks, make the base repository `yourusername/logviewer` and ensure the branch is set to master. Put any title you want and create the pull request. On the page that comes after this, merge the pull request.
-
-You then want to go to your log viewer application in Heroku, connect your logviewer fork via the Deploy tab and deploy the master branch.
-
-You can turn on auto-deploy for the master branch if you don't want to go through the process of logging into Heroku and deploying the branch every time changes to the repo are made in the future.
+To enable autoupdates, fork this repo and [install the Pull app in your fork](https://github.com/apps/pull). Then go to the Deploy tab in your Heroku account, select GitHub and connect your fork. Turn on auto-deploy for the master branch.
 
 ## Discord Oauth2 
 
