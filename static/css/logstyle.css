@@ -1,0 +1,609 @@
+/* === GENERAL === */
+
+@font-face {
+    font-family: Whitney;
+    font-style: light;
+    font-weight: 300;
+    src: url(https://discordapp.com/assets/6c6374bad0b0b6d204d8d6dc4a18d820.woff) format('woff');
+  }
+  
+@font-face {
+    font-family: Whitney;
+    font-style: normal;
+    font-weight: 500;
+    src: url(https://discordapp.com/assets/e8acd7d9bf6207f99350ca9f9e23b168.woff) format('woff');
+  }
+  
+@font-face {
+    font-family: Whitney;
+    font-style: medium;
+    font-weight: 600;
+    src: url(https://discordapp.com/assets/3bdef1251a424500c1b3a78dea9b7e57.woff) format('woff');
+  }
+  
+@font-face {
+    font-family: WhitneyMedium;
+    font-style: medium;
+    font-weight: 600;
+    src: url(https://discordapp.com/assets/be0060dafb7a0e31d2a1ca17c0708636.woff) format('woff');
+  }
+  
+@font-face {
+    font-family: Whitney;
+    font-style: bold;
+    font-weight: 700;
+    src: url(https://discordapp.com/assets/8e12fb4f14d9c4592eb8ec9f22337b04.woff) format('woff');
+  }
+
+a {
+    text-decoration: none;
+}
+
+img {
+    object-fit: contain;
+}
+
+.pre {
+    font-family: "Consolas", "Courier New", Courier, Monospace;
+    white-space: pre-wrap;
+}
+
+.mod-tag {
+    background: rgba(46, 204, 112, 0.75);
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.774)!important;
+    margin-left: 6px;
+    padding: 1px 2px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    vertical-align: bottom;
+    line-height: 16px;
+    -ms-flex-negative: 0;
+    flex-shrink: 0
+}
+
+.system-tag {
+    background: #7289da;
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff!important;
+    margin-left: 6px;
+    padding: 1px 2px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    vertical-align: bottom;
+    line-height: 16px;
+    -ms-flex-negative: 0;
+    flex-shrink: 0
+}
+
+.internal-tag {
+    background: #e28f23;
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff!important;
+    margin-left: 6px;
+    padding: 1px 2px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    vertical-align: bottom;
+    line-height: 16px;
+    -ms-flex-negative: 0;
+    flex-shrink: 0
+}
+
+.button {
+    align-co: right;
+    background-color:#7289da; 
+    color: rgba(255, 255, 255, 0.7);
+    border:transparent; 
+    border-radius: 2px; 
+    outline: transparent;
+}
+
+
+.pre--multiline {
+    font-family: Menlo, Consolas, Monaco, monospace;
+    margin-top: 4px;
+    padding: 8px;
+    border: 2px solid;
+    border-radius: 5px;    
+}
+
+.pre--inline {
+    font-family: Menlo, Consolas, Monaco, monospace;
+    font-size: 14px;
+    line-height: 16px;
+    padding: 2px;
+    border-radius: 3px;
+}
+
+.emoji {
+    width: 24px;
+    height: 24px;
+    margin: 0 1px;
+    vertical-align: middle;
+}
+
+.emoji--small {
+    width: 16px;
+    height: 16px;
+}
+
+.emoji--large {
+    width: 32px;
+    height: 32px;
+}
+
+.mention {
+    font-weight: 600;
+}
+
+/* === INFO === */
+
+.info {
+    display: flex;
+    max-width: 100%;
+    margin: 0 5px 10px 5px;    
+}
+
+.info__guild-icon-container {
+    flex: 0;
+}
+
+.info__guild-icon {
+    max-width: 88px;
+    max-height: 88px;
+    border-radius: 50%
+}
+
+.info__metadata {
+    flex: 1;
+    margin-left: 10px;
+}
+
+.info__guild-name {
+    font-size: 1.4em;
+}
+
+.info__channel-name {
+    font-size: 1.2em;
+}
+
+.info__channel-topic {
+    margin-top: 2px;
+}
+
+.info__channel-message-count {
+    margin-top: 2px;
+}
+
+.info__channel-date-range {
+    margin-top: 2px;
+}
+
+/* === CHATLOG === */
+
+body {
+    background-color: #2F3135;
+}
+
+.entry {
+    color: rgba(255, 255, 255, 0.7);
+    font-family: "Whitney", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+}
+
+@media (min-width: 800px) {
+    .entry {
+        padding-left: 15%;
+        padding-right: 15%
+    }
+}
+
+
+@media (max-width: 800px) {
+    .entry {
+        font-size: 85%
+    }
+
+    .pre--inline {
+        font-size: 85%
+    }
+}
+
+.chatlog {
+    max-width: 100%;
+    background: #37393E;
+    border-radius: 5px;
+}
+
+.chatlog__message-group {
+    display: flex;
+    margin: 0px;
+    padding: 15px 0;
+    border-bottom: 1px solid;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 3px
+}
+
+.chatlog__message-group.internal {
+    display: none;
+}
+
+.chatlog__message-group.close {
+    border-bottom: none
+}
+
+.chatlog__author-avatar-container {
+    flex: 0;
+    width: 40px;
+    height: 40px;
+}
+
+.chatlog__author-avatar {
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+}
+
+.chatlog__messages {
+    flex: 1;
+    min-width: 50%;
+    margin-left: 20px;
+}
+
+.chatlog__author-name {
+    font-size: 1em;
+}
+
+.chatlog__timestamp {
+    margin-left: 5px;
+    font-size: .75em;
+}
+
+.chatlog__content {
+    padding-top: 5px;
+    font-size: .9375em;
+    word-wrap: break-word;
+}
+
+.chatlog__edited-timestamp {
+    margin-left: 5px;
+    font-size: .8em;
+}
+
+.chatlog__attachment {
+    margin: 5px 0;
+}
+
+.chatlog__attachment-thumbnail {
+    max-width: 50%;
+    max-height: 500px;
+    border-radius: 3px;
+}
+
+.chatlog__embed {
+    display: flex;
+    max-width: 520px;
+    margin-top: 5px;
+}
+
+.chatlog__embed-color-pill {
+    flex-shrink: 0;
+    width: 4px;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.chatlog__embed-content-container {
+    display: flex;
+    flex-direction: column;
+    padding: 8px 10px;
+    border: 1px solid;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.chatlog__embed-content {
+    width: 100%;
+    display: flex;
+}
+
+.chatlog__embed-text {
+    flex: 1;
+}
+
+.chatlog__embed-author {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.chatlog__embed-author-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 9px;
+    border-radius: 50%;
+}
+
+.chatlog__embed-author-name {
+    font-size: .875em;
+    font-weight: 600;
+}
+
+.chatlog__embed-title {
+    margin-bottom: 4px;
+    font-size: .875em;
+    font-weight: 600;
+}
+
+.chatlog__embed-description {
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.chatlog__embed-fields {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.chatlog__embed-field {
+    flex: 0;
+    min-width: 100%;
+    max-width: 506px;
+    padding-top: 10px;
+}
+
+.chatlog__embed-field--inline {
+    flex: 1;
+    flex-basis: auto;
+    min-width: 150px;
+}
+
+.chatlog__embed-field-name {
+    margin-bottom: 4px;
+    font-size: .875em;
+    font-weight: 600;
+}
+
+.chatlog__embed-field-value {
+    font-size: .875em;
+    font-weight: 500;
+}
+
+.chatlog__embed-thumbnail {
+    flex: 0;
+    margin-left: 20px;
+    max-width: 80px;
+    max-height: 80px;
+    border-radius: 3px;
+}
+
+.chatlog__embed-image-container {
+    margin-top: 10px;
+}
+
+.chatlog__embed-image {    
+    max-width: 500px;
+    max-height: 400px;
+    border-radius: 3px;
+}
+
+.chatlog__embed-footer {
+    margin-top: 10px;
+}
+
+.chatlog__embed-footer-icon {
+    margin-right: 4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.chatlog__embed-footer-text {
+    font-weight: 600;
+    font-size: .75em;
+}
+
+.chatlog__reactions {
+    display: flex;    
+}
+
+.chatlog__reaction {
+    margin: 6px 2px 2px 2px;
+    padding: 2px 6px 2px 2px;
+    border-radius: 3px;
+}
+
+.chatlog__reaction-emoji {
+    margin-left: 3px;
+    vertical-align: middle;
+}
+
+.chatlog__reaction-count {
+    font-size: .875em;
+    vertical-align: middle;
+}
+
+a {
+    color: #0096cf;
+}
+
+.pre {
+    background-color: #2f3136;
+}
+
+.pre--multiline {
+    border-color: #282b30;
+    color: #839496;
+}
+
+.mention {
+    background-color: rgba(115, 139, 215, 0.1);
+    color: #7289da;
+}
+
+/* === INFO === */
+
+/* Tooltip container */
+.tooltip {
+    position: relative;
+    display: inline-block;
+  }
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    display: none;
+    padding: 1px 5px 1px 5px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    position: relative;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+    display: inline-block;
+}
+
+/* The switch - the box around the lever */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 36px;
+    height: 20px;
+  }
+  
+  /* Hide default HTML checkbox */
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  /* The lever */
+  .lever {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .lever:before {
+    position: absolute;
+    content: "";
+    height: 13.6px;
+    width: 13.6px;
+    left: 3.2px;
+    bottom: 3.2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+
+
+  * { -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
+  
+  input:checked + .lever {
+    background-color: #7289da;
+  }
+  
+  input:focus + .lever {
+    box-shadow: 0 0 1px #7289da;
+  }
+  
+  input:checked + .lever:before {
+    -webkit-transform: translateX(16px);
+    -ms-transform: translateX(16px);
+    transform: translateX(16px);
+  }
+  
+  /* Rounded levers */
+  .lever.round {
+    border-radius: 34px;
+  }
+  
+  .lever.round:before {
+    border-radius: 50%;
+  }
+
+.info__guild-name {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.info__channel-name {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.info__channel-topic {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* === CHATLOG === */
+
+.chatlog__message-group {
+    border-color: rgba(255, 255, 255, 0.04);
+}
+
+.chatlog__author-name {
+    color: #ffffff;
+}
+
+.chatlog__timestamp {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.chatlog__edited-timestamp {
+    color: rgba(255, 255, 255, 0.2);
+}
+
+.chatlog__embed-content-container {
+    background-color: rgba(46, 48, 54, 0.3);
+    border-color: rgba(46, 48, 54, 0.6);
+}
+
+.chatlog__embed-author-name {
+    color: #ffffff;
+}
+
+.chatlog__embed-author-name-link {
+    color: #ffffff;
+}
+
+.chatlog__embed-title {
+    color: #ffffff;
+}
+
+.chatlog__embed-description {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.chatlog__embed-field-name {
+    color: #ffffff;
+}
+
+.chatlog__embed-field-value {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.chatlog__embed-footer {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.chatlog__reaction {
+    border-color: rgba(255, 255, 255, 0.04);
+}
+
+.chatlog__reaction-count {
+    color: rgba(255, 255, 255, 0.3);
+}

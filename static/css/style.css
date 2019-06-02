@@ -1,0 +1,97 @@
+/* Custom Stylesheet */
+/**
+ * Use this file to override Materialize files so you can update
+ * the core Materialize files in the future
+ *
+ * Made By MaterializeCSS.com
+ */
+
+          
+body {
+  background-color: #2F3135;
+  color: white;
+}
+
+.nav-dash, .dash-content {
+  padding-left: 300px;
+}
+
+@media only screen and (max-width : 992px) {
+  .nav-dash, .dash-content {
+    padding-left: 0;
+  }
+}
+
+
+#dropdown1 {
+  background-color: #37393E;
+}
+
+#nav-mobile {
+  background-color: #24272A;
+}
+
+#nav-dash {
+  background-color: #24272A;
+}
+
+.btn {
+  background-color: #7289DA;
+}
+
+.btn:visited {
+  background-color: #7289DA;
+}
+
+.btn:hover {
+    background-color: rgb(64, 69, 75);
+}
+
+nav {
+  background-color: #2F3135;
+  /* z-index: 0; */
+}
+
+
+
+#dashbots {
+  font-family: 'Bowlby One SC', cursive;
+  color: #7289DA;
+  user-select: none;
+}
+
+@media (max-width:435px) {
+    #dashbots {
+      font-size: 13vw;
+    }
+  }
+
+.nav-icon {
+  vertical-align: middle; 
+  margin-left: 10px;
+}
+
+.discord {
+  color: #7289DA;
+}
+
+#main-card {
+    background-color: #37393E
+}
+
+.vertical-align-middle {
+    margin: 0px;
+    padding:0px;
+    float: left;
+    position:absolute;
+    top: 50%;
+    transform: translateY(-50%) translateX(-50%);
+    left:50%;
+}
+
+.icon-block {
+  padding: 0 15px;
+}
+.icon-block .material-icons {
+	font-size: inherit;
+}

@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
+        <link rel="shortcut icon" href="static/favicon.ico">
+        <title>Logviewer</title>
+        <meta name="theme-color" content="#7289DA">
+
+		<!-- CSS  -->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link rel="stylesheet" href="/static/css/materialize.css" media="screen,projection" >
+		<link href="/static/css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+		<link href="/static/css/animate.min.css" type="text/css" rel="stylesheet" media="screen,projection" />
+        <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC" rel="stylesheet">
+	</head>
+
+	<body>
+		{% block navbar %}
+		
+		{% include 'navbar.html' %}
+
+		{% endblock %}
+
+		{% block content %}{% endblock %}
+
+		<!--  Scripts-->
+		
+		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script>
+        M.AutoInit();
+        $('.dropdown-trigger').dropdown({coverTrigger: false});
+        </script>
+
+        {% block scripts %} {% endblock %}
+
+	</body>
+</html>

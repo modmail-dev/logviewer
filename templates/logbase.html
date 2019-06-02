@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Log Entry</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width"/>
+
+    <meta content="{{ log_entry.thread_messages | length }} messages {% if log_entry.open %}(Open){% else %}(Closed){% endif %}" property="og:site_name">
+    <meta content="Recipient: {{ log_entry.recipient | string | e }}" property="og:title">
+    <meta content='{{ log_entry.recipient.avatar_url }}' property='og:image'>
+    <meta content='Created {{ log_entry.human_created_at }}' property='og:image'>
+
+    <link href="/static/css/logstyle.css" rel="stylesheet">
+    <link href="/static/css/solarized-dark.css" rel="stylesheet">
+    <link rel="shortcut icon" href="/static/favicon.ico">
+
+    <link rel="stylesheet" href="/static/css/solarized-dark.css">
+    <script src="/static/js/highlight.pack.js"></script>
+    <script src="/static/js/jquery-3.3.1.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/materialize.css" media="screen,projection" >
+    <link href="/static/css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="/static/css/animate.min.css" type="text/css" rel="stylesheet" media="screen,projection" />
+    <link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC" rel="stylesheet">
+</head>
+
+<body>
+
+        {% block navbar %}
+		
+		{% include 'navbar.html' %}
+
+		{% endblock %}
+    
+    
+<div class='entry'>
+
+    <br>
+    <div class="info">
+        <div class="info__guild-icon-container">
+            <img class="info__guild-icon hoverable"
+                 src="{{ log_entry.recipient.avatar_url }}"
+                 onerror="this.src='{{ log_entry.recipient.default_avatar_url }}'"
+                 alt="avatar">
+        </div>
+        <div class="info__metadata">
+            <div class="info__guild-name"><span style='color:white'>Thread Logs</span> {% if log_entry.open %}
+                (Open){% else %}(Closed){% endif %}</div>
+            <div title="{{ log_entry.recipient.id }}" class="info__channel-topic tooltip"><span style="color:white">Recipient:
+                <b>{{ log_entry.recipient.name | e }}</b></span>#{{ log_entry.recipient.discriminator }}
+                <span class='tooltiptext pre pre--inline'>{{ log_entry.recipient.id }}</span>
+            </div>
+            {% if log_entry.recipient != log_entry.creator %}
+            <br>
+                <div class="info__channel-topic tooltip"><span style="color:white">Creator:
+                    <b>{{ log_entry.creator.name | e }}</span></b>#{{ log_entry.creator.discriminator }}
+                    <span class='tooltiptext pre pre--inline'>{{ log_entry.creator.id }}</span>
+                </div>
+            {% endif %}
+
+            <div class="info__channel-message-count">{{ log_entry.thread_messages | length }}
+                messages 
+                {% if log_entry.internal_messages %}
+            
+                <div style="display: flex; justify-content: flex-end">
+                <label class="switch" title="Toggle viewing internal messages">
+                        <input id='internal_toggle' type="checkbox" onclick="toggleInternalMessages()">
+                        <span class="lever round"></span>
+                    </label>
+                </div>
+                
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="chatlog">
+        {% for group in log_entry.message_groups %}
+            <div class="{{group.type}} chatlog__message-group active_hover" onclick="hoverIt(this)" >
+                <div class="chatlog__author-avatar-container">
+                        <img class="chatlog__author-avatar"
+                             src="{{ group.author.avatar_url }}"
+                             onerror="this.src='{{ group.author.default_avatar_url }}'"
+                             alt="avatar"/>
+                </div>
+
+                <div class="chatlog__messages">
+                    <span class="chatlog__author-name" title="{{ group.author | string | e }}">{{ group.author.name | e }}</span>
+                    {% if group.type == 'thread_message' %}
+                    {% if group.author.mod %}
+                        <span class="mod-tag">Reply</span>
+                    {% endif %}
+                    {% elif group.type == 'anonymous' %}
+                    <span class='mod-tag'>Anon</span>
+                    {% elif group.type == 'internal' %}
+                    <span class='internal-tag'>Internal</span>
+                    {% else %}
+                        <span>took a note</span><span class="system-tag">note</span>
+                    {% endif %}
+                    <span class="chatlog__timestamp">{{ group.created_at }}</span>
+                    {% for message in group.messages %}
+                        {% if message.content %}
+                            <div class="chatlog__content" id="{{ message.id }}">
+                                {{ message.content }}
+                                {% if message.edited %}
+                                <span class="chatlog__edited-timestamp">(edited)</span>
+                                {% endif %}
+                            </div>
+
+                        {% endif %}
+                        {% for attachment in message.attachments %}
+                            <div class="chatlog__attachment" id="{{ message.id }}">
+                                <a href="{{ attachment.url }}">
+                                    {% if attachment.is_image %}
+                                    <img class="chatlog__attachment-thumbnail" src="{{ attachment.url }}" alt="attachment"/>
+                                    {% else %}
+                                    Attachment: {{ attachment.filename }}
+                                    {% endif %}
+                                </a>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+        {% if not log_entry.open %}
+            <div class="chatlog__message-group close">
+                <div class="chatlog__author-avatar-container">
+                    <img class="chatlog__author-avatar"
+                         src="{{ log_entry.system_avatar_url }}" alt="avatar">
+                </div>
+                <div class="chatlog__messages">
+                    <span class="chatlog__author-name"
+                          title="{{ log_entry.closer | string | e }}">{{ log_entry.closer.name }}</span>
+                    {% if log_entry.closer.mod %}
+                        <span>closed the thread</span>
+                        <span class="system-tag">System</span>
+                    {% endif %}
+                    <span class="chatlog__timestamp">{{ log_entry.human_closed_at }}</span>
+                    {% if log_entry.close_message %}
+                        <div class="chatlog__content">
+                            {{ log_entry.close_message }}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+    <script>
+
+        function hoverIt(elem) {
+            for (let child of elem.children[1].children) {
+                if (child.classList.contains('chatlog__content') || child.classList.contains('chatlog__attachment')) {
+                    let should_add = false
+                    if (!elem.classList.contains('perma_hover')) {
+                        should_add = true
+                    }
+                    removePermaHover()
+                    if (should_add) {
+                        history.pushState(null, null, '#' + child.id);
+                        elem.classList.add('perma_hover')
+                    }
+                    return 
+                }
+            }
+        }
+
+        function highlightMessage() {
+
+            let message_id = document.location.hash.split('#')[1]
+            if (message_id) {
+                msg = document.getElementById(message_id)
+                if (msg) {
+                    let group = msg.parentElement.parentElement
+                    group.classList.add('perma_hover')
+                    return group
+                }
+            }
+        } 
+
+        function removePermaHover(elem) {
+            for (let elem of document.getElementsByClassName('perma_hover')) {
+                elem.classList.remove('perma_hover')
+            }
+            history.pushState(null, null, window.location.href.split('#')[0])
+        }
+
+        window.onhashchange = highlightMessage;
+
+        function scrollToElement(pageElement) {          
+                let y = pageElement.getBoundingClientRect().top + window.scrollY - 70
+                window.scroll({
+                    top: y,
+                    behavior: 'smooth'
+                    });
+        }
+
+
+        let messages = document.getElementsByClassName('internal')
+
+        for (let m of messages) {
+            m.style.display = "none";
+        }
+
+
+        let initial_group = highlightMessage()
+        if (initial_group) {
+
+            if (initial_group.classList.contains('internal')) {
+                toggle = document.getElementById('internal_toggle')
+                toggle.click()
+            }
+            scrollToElement(initial_group)
+        }
+
+        $(document).ready(function() {
+            $('.pre--multiline').each(function(i, block) {
+                hljs.highlightBlock(block);
+            });
+        });
+
+        function toggleInternalMessages() {   
+            let messages = document.getElementsByClassName('internal')
+            for (let m of messages) {
+                if (m.style.display === "none") {
+                    m.style.display = "flex";
+                } else {
+                    m.style.display = "none";
+                }
+            }
+        }
+
+    </script>
+        
+		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script>
+        M.AutoInit();
+        $('.dropdown-trigger').dropdown({coverTrigger: false});
+        </script>
+</body>
+</html>

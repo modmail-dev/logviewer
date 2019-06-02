@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+python-dateutil = "*"
+motor = "*"
+sanic = "*"
+dnspython = "*"
+natural = "*"
+sanic-session = "*"
+"Jinja2" = "*"
+aiohttp = "*"
+discord-py = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.7"
