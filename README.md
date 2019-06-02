@@ -33,7 +33,7 @@ You can turn on auto-deploy for the master branch if you don't want to go throug
 
 ## Discord Oauth2 
 
-Discord oauth2 support is a premium feature, only available to [Patrons](https://patreon.com/kyber).
+Protecting your logs with a login (Discord Oauth2 support) is a premium feature, only available to [Patrons](https://patreon.com/kyber).
 
 ## Contributing
 
