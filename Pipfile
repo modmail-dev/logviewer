@@ -1,20 +1,21 @@
 [[source]]
+name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
-name = "pypi"
 
 [packages]
-python-dateutil = "*"
-motor = "*"
-sanic = "*"
-dnspython = "*"
-natural = "*"
-sanic-session = "*"
-"Jinja2" = "*"
-aiohttp = "*"
-discord-py = "*"
-
-[dev-packages]
+motor = ">=2.0.0"
+sanic = "<19.6.0,>=19.3.1"
+sanic-session = ">=0.5.1"
+dnspython = "~=1.16.0"
+natural = "==0.2.0"
+jinja2 = ">=2.10.1"
+aiohttp = "<3.6.0,>=3.3.0"
+pipenv = "*"
+"discord.py" = "==1.2.3"
 
 [requires]
 python_version = "3.7"
+
+[scripts]
+logviewer = "python app.py"

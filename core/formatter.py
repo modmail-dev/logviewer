@@ -1,6 +1,6 @@
+import base64
 import html
 import re
-import base64
 
 
 def format_content_html(content: str, allow_links: bool = False) -> str:
@@ -16,11 +16,11 @@ def format_content_html(content: str, allow_links: bool = False) -> str:
     content = html.escape(content)
 
     def encode_inline_codeblock(m):
-        encoded = base64.b64encode(m.group(1).encode()).decode()
+        encoded = base64.b64encode((m.group(1) or m.group(2)).encode()).decode()
         return "\x1AI" + encoded + "\x1AI"
 
-    # Encode inline codeblocks (`text`)
-    content = re.sub(r"`([^`]+)`", encode_inline_codeblock, content)
+    # Encode inline codeblocks (`text`) allows one or two ticks
+    content = re.sub(r"`([^`]+)`|``([^`]+)``", encode_inline_codeblock, content)
 
     # Encode links
     if allow_links:

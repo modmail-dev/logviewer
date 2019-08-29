@@ -1,11 +1,12 @@
+import asyncio
 from functools import wraps
-from sanic.exceptions import abort
-from sanic import response
 import inspect
-import datetime
+
 from discord.enums import DefaultAvatar
 from discord.utils import snowflake_time
-import asyncio
+
+from sanic.exceptions import abort
+from sanic import response
 
 
 class User:
@@ -73,8 +74,8 @@ def get_stack_variable(name):
     stack = inspect.stack()
     try:
         for frames in stack:
+            frame = frames[0]
             try:
-                frame = frames[0]
                 current_locals = frame.f_locals
                 if name in current_locals:
                     return current_locals[name]

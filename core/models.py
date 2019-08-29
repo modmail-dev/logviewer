@@ -1,8 +1,8 @@
 from datetime import datetime
-import dateutil.parser
+
+from natural.date import duration
 
 from sanic import response
-from natural.date import duration
 
 from core.formatter import format_content_html
 
@@ -12,10 +12,10 @@ class LogEntry:
         self.app = app
         self.key = data["key"]
         self.open = data["open"]
-        self.created_at = dateutil.parser.parse(data["created_at"])
+        self.created_at = datetime.fromisoformat(data["created_at"])
         self.human_created_at = duration(self.created_at, now=datetime.utcnow())
         self.closed_at = (
-            dateutil.parser.parse(data["closed_at"]) if not self.open else None
+            datetime.fromisoformat(data["closed_at"]) if not self.open else None
         )
         self.channel_id = int(data["channel_id"])
         self.guild_id = int(data["guild_id"])
@@ -165,7 +165,7 @@ class Attachment:
 class Message:
     def __init__(self, data):
         self.id = int(data["message_id"])
-        self.created_at = dateutil.parser.parse(data["timestamp"])
+        self.created_at = datetime.fromisoformat(data["timestamp"])
         self.human_created_at = duration(self.created_at, now=datetime.utcnow())
         self.raw_content = data["content"]
         self.content = self.format_html_content(self.raw_content)

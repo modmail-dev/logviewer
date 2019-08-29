@@ -1,7 +1,6 @@
-FROM library/python:latest
-RUN apt update && apt install -y pipenv
-RUN mkdir -p /bot && cd /bot && git clone https://github.com/kyb3r/logviewer .
-WORKDIR /bot
-RUN pipenv install --skip-lock
-
-CMD ["pipenv", "run", "python3", "app.py"]
+FROM python:3.7.4
+WORKDIR /modmaillogviewer
+COPY . /modmaillogviewer
+EXPOSE 80/tcp
+RUN pip install --no-cache-dir pipenv && pipenv install --skip-lock
+CMD ["pipenv", "run", "logviewer"]
