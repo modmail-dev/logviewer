@@ -270,7 +270,7 @@ body {
     word-wrap: break-word;
 }
 
-.chatlog__edited-timestamp {
+.chatlog__edited-timestamp, .chatlog__deleted-timestamp {
     margin-left: 5px;
     font-size: .8em;
 }
@@ -563,7 +563,7 @@ a {
     color: rgba(255, 255, 255, 0.2);
 }
 
-.chatlog__edited-timestamp {
+.chatlog__edited-timestamp, .chatlog__deleted-timestamp {
     color: rgba(255, 255, 255, 0.2);
 }
 

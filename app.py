@@ -1,37 +1,30 @@
 import os
+from distutils.util import strtobool
 
 import aiohttp
-from jinja2 import Environment, PackageLoader
+from jinja2 import Environment, FileSystemLoader
 from motor.motor_asyncio import AsyncIOMotorClient
 
-from sanic import Sanic, response
+from sanic import Sanic, response, Blueprint
 from sanic.exceptions import abort, NotFound
-from sanic_session import Session, InMemorySessionInterface
 
 from core.models import LogEntry
-from core.utils import get_stack_variable, authrequired
 
 
 prefix = os.getenv("URL_PREFIX", "/logs")
 if prefix == "NONE":
     prefix = ""
 
-app = Sanic(__name__)
-app.using_oauth = False
+logs = Blueprint('logs', prefix)
 
-Session(app, interface=InMemorySessionInterface())
+app = Sanic(__name__)
 app.static("/static", "./static")
 
-jinja_env = Environment(loader=PackageLoader("app", "templates"))
+jinja_env = Environment(loader=FileSystemLoader(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')))
 
 
 def render_template(name, *args, **kwargs):
     template = jinja_env.get_template(name + ".html")
-    request = get_stack_variable("request")
-    if request:
-        kwargs["request"] = request
-        kwargs["session"] = request["session"]
-        kwargs["user"] = request["session"].get("user")
     kwargs.update(globals())
     return response.html(template.render(*args, **kwargs))
 
@@ -55,35 +48,33 @@ async def index(request):
     return render_template("index")
 
 
-@app.get(prefix + "/raw/<key>")
-@authrequired()
-async def get_raw_logs_file(request, document):
+@logs.get("/raw/<key>")
+async def get_raw_logs_file(request, key):
     """Returns the plain text rendered log entry"""
-
+    document = await app.db.logs.find_one({"key": key})
     if document is None:
         abort(404)
 
     log_entry = LogEntry(app, document)
-
     return log_entry.render_plain_text()
 
 
-@app.get(prefix + "/<key>")
-@authrequired()
-async def get_logs_file(request, document):
+@logs.get("/<key>")
+async def get_logs_file(request, key):
     """Returns the html rendered log entry"""
-
+    document = await app.db.logs.find_one({"key": key})
     if document is None:
         abort(404)
 
     log_entry = LogEntry(app, document)
-
     return log_entry.render_html()
 
+
+app.blueprint(logs)
 
 if __name__ == "__main__":
     app.run(
         host=os.getenv("HOST", "0.0.0.0"),
-        port=os.getenv("PORT", 80),
-        debug=bool(os.getenv("DEBUG", False)),
+        port=int(os.getenv("PORT", 80)),
+        debug=strtobool(os.getenv("DEBUG", 'false')),
     )

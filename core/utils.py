@@ -1,12 +1,5 @@
-import asyncio
-from functools import wraps
-import inspect
-
 from discord.enums import DefaultAvatar
 from discord.utils import snowflake_time
-
-from sanic.exceptions import abort
-from sanic import response
 
 
 class User:
@@ -69,62 +62,3 @@ class User:
         This is when the user's discord account was created."""
         return snowflake_time(self.id)
 
-
-def get_stack_variable(name):
-    stack = inspect.stack()
-    try:
-        for frames in stack:
-            frame = frames[0]
-            try:
-                current_locals = frame.f_locals
-                if name in current_locals:
-                    return current_locals[name]
-            finally:
-                del frame
-    finally:
-        del stack
-
-
-def authrequired():
-    def decorator(func):
-        @wraps(func)
-        async def wrapper(request, key):
-            app = request.app
-
-            if not app.using_oauth:
-                return await func(request, await app.db.logs.find_one({"key": key}))
-            elif not request["session"].get("logged_in"):
-                request["session"]["from"] = request.url
-                return response.redirect("/login")
-
-            user = request["session"]["user"]
-
-            config, document = await asyncio.gather(
-                app.db.config.find_one({"bot_id": int(app.bot_id)}),
-                app.db.logs.find_one({"key": key}),
-            )
-
-            whitelist = config.get("oauth_whitelist", [])
-            if document:
-                if str(app.bot_id) != document.get("bot_id"):
-                    abort(
-                        401,
-                        message="Your account does not have permission to view this page.",
-                    )
-                whitelist.extend(document.get("oauth_whitelist", []))
-
-            if int(user["id"]) in whitelist or "everyone" in whitelist:
-                return await func(request, document)
-
-            roles = await app.get_user_roles(user["id"])
-
-            if any(int(r) in whitelist for r in roles):
-                return await func(request, document)
-
-            abort(
-                401, message="Your account does not have permission to view this page."
-            )
-
-        return wrapper
-
-    return decorator

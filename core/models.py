@@ -26,12 +26,12 @@ class LogEntry:
         self.messages = [Message(m) for m in data["messages"]]
         self.internal_messages = [m for m in self.messages if m.type == "internal"]
         self.thread_messages = [
-            m for m in self.messages if m.type not in ("internal", "system")
+            m for m in self.messages if m.type not in {"internal", "system"}
         ]
 
     @property
     def system_avatar_url(self):
-        return "https://discordapp.com/assets/" "f78426a064bc9dd24847519259bc42af.png"
+        return "https://discordapp.com/assets/f78426a064bc9dd24847519259bc42af.png"
 
     @property
     def human_closed_at(self):
@@ -96,7 +96,6 @@ class LogEntry:
 
                 if curr != next_:
                     out += "────────────────────────────────\n"
-                    current_author = author
 
         if not self.open:
             if messages:  # only add if at least 1 message was sent
@@ -173,6 +172,8 @@ class Message:
         self.author = User(data["author"])
         self.type = data.get("type", "thread_message")
         self.edited = data.get("edited", False)
+        # TODO: implement
+        self.deleted = data.get("deleted", False)
 
     def is_different_from(self, other):
         return (

@@ -26,13 +26,9 @@
 </head>
 
 <body>
-
-        {% block navbar %}
-		
-		{% include 'navbar.html' %}
-
-		{% endblock %}
-    
+{% block navbar %}
+{% include 'navbar.html' %}
+{% endblock %}
     
 <div class='entry'>
 
@@ -103,7 +99,9 @@
                         {% if message.content %}
                             <div class="chatlog__content" id="{{ message.id }}">
                                 {{ message.content }}
-                                {% if message.edited %}
+                                {% if message.deleted %}
+                                <span class="chatlog__deleted-timestamp">(deleted)</span>
+                                {% elif message.edited %}
                                 <span class="chatlog__edited-timestamp">(edited)</span>
                                 {% endif %}
                             </div>
