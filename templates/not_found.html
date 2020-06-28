@@ -6,7 +6,7 @@
 <div class="vertical-align-middle center container">
     <div class="card-panel hoverable" id='main-card'>
         <h1 class="animated jackInTheBox header" id='dashbots'>404 Not found</h1>
-        <h5 class="header col s12 light grey-text">The page you are looking for is not here.</h5>
+        <h5 class="header col s12 light grey-text">{% block err_msg %}The page you are looking for is not here.{% endblock %}</h5>
         <br>
     </div>
 </div>

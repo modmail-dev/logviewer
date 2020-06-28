@@ -1,18 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="theme-dark">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0" />
         <link rel="shortcut icon" href="/static/favicon.ico">
-        <title>Logviewer</title>
-        <meta name="theme-color" content="#7289DA">
+        <title>{% block title %}Logviewer{% endblock %}</title>
+        {% block meta %}
+		{% endblock %}
 
 		<!-- CSS -->
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-		<link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC" rel="stylesheet">
-        <link href="/static/css/materialize.css" rel="stylesheet">
-		<link href="/static/css/style.css" rel="stylesheet">
+        <link href="/static/css/materialize.min.css" rel="stylesheet">
 		<link href="/static/css/animate.min.css" rel="stylesheet">
+
+		<link href="/static/css/style.css" rel="stylesheet">
+
+		{% block style %}
+		{% endblock %}
+
 	</head>
 
 	<body>
@@ -24,15 +28,8 @@
 		{% endblock %}
 
 		<!-- Scripts -->
-
-		<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-
-        <script>
-        M.AutoInit();
-        $('.dropdown-trigger').dropdown({coverTrigger: false});
-        </script>
+        <script src="/static/js/jquery-3.3.1.min.js"></script>
+        <script src="/static/js/materialize.min.js"></script>
 
         {% block scripts %}
 		{% endblock %}

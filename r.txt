@@ -1,0 +1,11 @@
+# Generated requirements.txt
+
+motor>=2.0.0
+sanic<19.6.0,>=19.3.1
+sanic-session
+python-dateutil
+dnspython~=1.16.0
+natural==0.2.0
+jinja2>=2.10.1
+aiohttp<3.6.0,>=3.3.0
+discord.py==1.2.3

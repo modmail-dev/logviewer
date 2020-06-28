@@ -6,10 +6,117 @@
  * Made By MaterializeCSS.com
  */
 
-          
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(/static/fonts/MaterialIcons-Regular.eot); /* For IE6-8 */
+  src: local('Material Icons'),
+    local('MaterialIcons-Regular'),
+    url(/static/fonts/MaterialIcons-Regular.woff2) format('woff2'),
+    url(/static/fonts/MaterialIcons-Regular.woff) format('woff'),
+    url(/static/fonts/MaterialIcons-Regular.ttf) format('truetype');
+}
+
+.theme-dark {
+    --header-primary:#fff;--header-secondary:#b9bbbe;--text-normal:#dcddde;--text-muted:#72767d;--text-link:#00b0f4;--channels-default:#8e9297;--interactive-normal:#b9bbbe;--interactive-hover:#dcddde;--interactive-active:#fff;--interactive-muted:#4f545c;--background-primary:#36393f;--background-secondary:#2f3136;--background-tertiary:#202225;--background-accent:#4f545c;--background-floating:#18191c;--background-mobile-header:#2f3136;--background-modifier-hover:rgba(79,84,92,0.16);--background-modifier-active:rgba(79,84,92,0.24);--background-modifier-selected:rgba(79,84,92,0.32);--background-modifier-accent:hsla(0,0%,100%,0.06);--elevation-low:0 1px 0 rgba(4,4,5,0.2),0 1.5px 0 rgba(6,6,7,0.05),0 2px 0 rgba(4,4,5,0.05);--elevation-high:0 8px 16px rgba(0,0,0,0.24);--logo-primary:#fff;--guild-header-text-shadow:0 1px 1px rgba(0,0,0,0.4);--channeltextarea-background:#40444b;--activity-card-background:#202225;--textbox-markdown-syntax:#8e9297;--deprecated-panel-background:#292b2f;--deprecated-card-bg:rgba(32,34,37,0.6);--deprecated-card-editable-bg:rgba(32,34,37,0.3);--deprecated-store-bg:#36393f;--deprecated-quickswitcher-input-background:#72767d;--deprecated-quickswitcher-input-placeholder:hsla(0,0%,100%,0.3);--deprecated-text-input-bg:rgba(0,0,0,0.1);--deprecated-text-input-border:rgba(0,0,0,0.3);--deprecated-text-input-border-hover:#040405;--deprecated-text-input-border-disabled:#202225;--deprecated-text-input-prefix:#dcddde
+}
+
+.theme-light {
+    --header-primary:#060607;--header-secondary:#4f5660;--text-normal:#2e3338;--text-muted:#747f8d;--text-link:#0067e0;--channels-default:#6a7480;--interactive-normal:#4f5660;--interactive-hover:#2e3338;--interactive-active:#060607;--interactive-muted:#c7ccd1;--background-primary:#fff;--background-secondary:#f2f3f5;--background-tertiary:#e3e5e8;--background-accent:#747f8d;--background-floating:#fff;--background-mobile-header:#fff;--background-modifier-hover:rgba(116,127,141,0.08);--background-modifier-active:rgba(116,127,141,0.16);--background-modifier-selected:rgba(116,127,141,0.24);--background-modifier-accent:rgba(6,6,7,0.08);--elevation-low:0 1px 0 rgba(6,6,7,0.1),0 1.5px 0 rgba(6,6,7,0.025),0 2px 0 rgba(6,6,7,0.025);--elevation-high:0 8px 16px rgba(0,0,0,0.16);--logo-primary:#7289da;--guild-header-text-shadow:0 1px 1px hsla(0,0%,100%,0.4);--channeltextarea-background:#ebedef;--activity-card-background:#fff;--textbox-markdown-syntax:#6a7480;--deprecated-panel-background:#ebedef;--deprecated-card-bg:#f8f9f9;--deprecated-card-editable-bg:rgba(246,246,247,0.6);--deprecated-store-bg:#f8f9f9;--deprecated-quickswitcher-input-background:#fff;--deprecated-quickswitcher-input-placeholder:rgba(79,84,92,0.3);--deprecated-text-input-bg:rgba(79,84,92,0.02);--deprecated-text-input-border:rgba(79,84,92,0.3);--deprecated-text-input-border-hover:#b9bbbe;--deprecated-text-input-border-disabled:#dcddde;--deprecated-text-input-prefix:#b9bbbe
+}
+
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+
+
+/* latin-ext */
+@font-face {
+  font-family: 'Bowlby One SC';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Bowlby One SC Regular'),
+    local('BowlbyOneSC-Regular'),
+    url(/static/fonts/DtVlJxerQqQm37tzN3wMug9P_gH2oipOnuCABQ.woff2) format('woff2');
+  unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* latin */
+@font-face {
+  font-family: 'Bowlby One SC';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Bowlby One SC Regular'),
+    local('BowlbyOneSC-Regular'),
+    url(/static/fonts/DtVlJxerQqQm37tzN3wMug9P_g_2oipOnuA.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+
+img[alt] {
+    text-indent: -9999px;
+}
+
+a, big, button, blockquote, body, caption, code, div, em, form, h1, h2, h3, h4, h5, h6, html, iframe, img, label, li, p, pre, s, small, span, strike, strong {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-family: inherit;
+    vertical-align: baseline;
+    line-height: 1.375;
+}
+
 body {
-  background-color: #2F3135;
-  color: white;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: var(--background-primary);
+    text-rendering: optimizeLegibility;
+}
+
+body, html {
+    height: 100%;
+    width: 100%;
+}
+
+
+::-webkit-input-placeholder, body, button, input, select, textarea {
+    font-family: Whitney,Helvetica Neue,Helvetica,Arial,sans-serif;
+    text-rendering: optimizeLegibility;
+}
+
+::placeholder, body, button, input, select, textarea {
+    font-family: Whitney,Helvetica Neue,Helvetica,Arial,sans-serif;
+    text-rendering: optimizeLegibility;
 }
 
 .nav-dash, .dash-content {
@@ -23,36 +130,21 @@ body {
 }
 
 
-#dropdown1 {
-  background-color: #37393E;
-}
-
-#nav-mobile {
-  background-color: #24272A;
-}
-
-#nav-dash {
-  background-color: #24272A;
-}
-
-.btn {
-  background-color: #7289DA;
-}
-
-.btn:visited {
-  background-color: #7289DA;
+.btn, .btn:visited {
+    margin: 0 auto;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #fff;
+    background-color: #7289DA;
 }
 
 .btn:hover {
-    background-color: rgb(64, 69, 75);
+    background-color: #677bc4;
 }
 
 nav {
-  background-color: #2F3135;
-  /* z-index: 0; */
+  background-color: var(--background-primary);
 }
-
-
 
 #dashbots {
   font-family: 'Bowlby One SC', cursive;
@@ -66,32 +158,16 @@ nav {
     }
   }
 
-.nav-icon {
-  vertical-align: middle; 
-  margin-left: 10px;
-}
-
-.discord {
-  color: #7289DA;
-}
-
 #main-card {
-    background-color: #37393E
+    background-color: var(--background-secondary);
 }
 
 .vertical-align-middle {
-    margin: 0px;
-    padding:0px;
+    margin: 0;
+    padding:0;
     float: left;
     position:absolute;
     top: 50%;
     transform: translateY(-50%) translateX(-50%);
     left:50%;
-}
-
-.icon-block {
-  padding: 0 15px;
-}
-.icon-block .material-icons {
-	font-size: inherit;
 }

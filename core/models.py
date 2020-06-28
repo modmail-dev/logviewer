@@ -4,7 +4,7 @@ from natural.date import duration
 
 from sanic import response
 
-from core.formatter import format_content_html
+from . import format_markdown
 
 
 class LogEntry:
@@ -14,15 +14,33 @@ class LogEntry:
         self.open = data["open"]
         self.created_at = datetime.fromisoformat(data["created_at"])
         self.human_created_at = duration(self.created_at, now=datetime.utcnow())
-        self.closed_at = (
-            datetime.fromisoformat(data["closed_at"]) if not self.open else None
-        )
         self.channel_id = int(data["channel_id"])
         self.guild_id = int(data["guild_id"])
         self.creator = User(data["creator"])
         self.recipient = User(data["recipient"])
-        self.closer = User(data["closer"]) if not self.open else None
-        self.close_message = format_content_html(data.get("close_message") or "")
+        if not self.open:
+            if not data.get("close"):
+                # backwards compat
+                if not data.get("closer"):
+                    # something's wrong
+                    self.closer = self.closed_at = None
+                    self.raw_close_message = ""
+                else:
+                    self.closed_at = datetime.fromisoformat(data["closed_at"])
+                    self.closer = User(data["closer"])
+                    self.raw_close_message = data.get("close_message") or ""
+                self.close_context = None
+            else:
+                self.closer = User(data["close"]["closer"])
+                self.closed_at = datetime.fromisoformat(data["close"]["timestamp"])
+                self.raw_close_message = data["close"].get("content") or ""
+                self.close_context = data["close"]["context"]
+        else:
+            self.closer = self.closed_at = self.close_context = None
+            self.raw_close_message = ""
+
+        self.close_message = format_markdown(self.close_context, self.raw_close_message)
+
         self.messages = [Message(m) for m in data["messages"]]
         self.internal_messages = [m for m in self.messages if m.type == "internal"]
         self.thread_messages = [
@@ -52,7 +70,7 @@ class LogEntry:
 
             curr.messages.append(message)
 
-            if message.is_different_from(next_message):
+            if not message.can_be_grouped(next_message):
                 groups.append(curr)
                 curr = MessageGroup(next_message.author)
 
@@ -167,7 +185,8 @@ class Message:
         self.created_at = datetime.fromisoformat(data["timestamp"])
         self.human_created_at = duration(self.created_at, now=datetime.utcnow())
         self.raw_content = data["content"]
-        self.content = self.format_html_content(self.raw_content)
+        self.context = data.get("context", None)
+        self.content = format_markdown(self.context, self.raw_content)
         self.attachments = [Attachment(a) for a in data["attachments"]]
         self.author = User(data["author"])
         self.type = data.get("type", "thread_message")
@@ -175,13 +194,13 @@ class Message:
         # TODO: implement
         self.deleted = data.get("deleted", False)
 
-    def is_different_from(self, other):
-        return (
-            (other.created_at - self.created_at).total_seconds() > 60
-            or other.author != self.author
-            or other.type != self.type
-        )
+    def can_be_grouped(self, other):
+        # 7 minutes
+        if (other.created_at - self.created_at).total_seconds() > 420:
+            return False
 
-    @staticmethod
-    def format_html_content(content):
-        return format_content_html(content)
+        # Different author or different message type
+        if other.author != self.author or other.type != self.type:
+            return False
+
+        return True

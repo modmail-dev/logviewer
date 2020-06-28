@@ -12,6 +12,8 @@ jinja2 = ">=2.10.1"
 aiohttp = "<3.6.0,>=3.3.0"
 pipenv = "*"
 "discord.py" = "==1.2.3"
+regex = "==2019.12.19"
+python-dotenv = ">=0.10.3"
 
 [requires]
 python_version = "3.7"
