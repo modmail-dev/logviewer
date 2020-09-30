@@ -13,13 +13,13 @@
 
 ## What is this?
 
-In order for you to view your selfhosted logs, you have to deploy this application. Before you deploy the application, create a config var named `MONGO_URI` and put your MongoDB connection URI from the previous section into the value slot. Take the url of this app after you deploy it and input it as a config var `LOG_URL` in the modmail bot app.
+In order for you to view your self-hosted logs, you have to deploy this application. Before you deploy the application, create a config var named `MONGO_URI` and put your MongoDB connection URI from the previous section into the value slot. Take the URL of this app after you deploy it and input it as a config var `LOG_URL` in the modmail bot app.
 
 ## Updating
 
-You can automatically update the logviewer in your Heroku account whenever changes are made to this repo.
+You can automatically update the log viewer in your Heroku account whenever changes are made to this repo.
 
-To enable autoupdates, fork this repo and [install the Pull app in your fork](https://github.com/apps/pull). Then go to the Deploy tab in your Heroku account, select GitHub and connect your fork. Turn on auto-deploy for the master branch.
+To enable auto-updates, fork this repo and [install the Pull app in your fork](https://github.com/apps/pull). Then go to the Deploy tab in your Heroku account, select GitHub, and connect your fork. Turn on auto-deploy for the master branch.
 
 ## Discord Oauth2 
 
