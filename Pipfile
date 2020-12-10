@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 python-dateutil = "*"
 motor = "*"
-sanic = "~=19.3"
+sanic = "~=19.3.1"
 dnspython = ">=1.16.0"
 natural = "*"
 sanic-session = "==0.5.1"
