@@ -13,7 +13,12 @@ import aiohttp
 from core.models import LogEntry
 from core.utils import get_stack_variable, authrequired, User
 
-prefix = os.getenv("URL_PREFIX", "/logs")
+if "URL_PREFIX" in os.environ:
+    print("Using the legacy config var `URL_PREFIX`, rename it to `LOG_URL_PREFIX`")
+    prefix = os.environ["URL_PREFIX"]
+else:
+    prefix = os.getenv("LOG_URL_PREFIX", "/logs")
+
 if prefix == "NONE":
     prefix = ""
 
