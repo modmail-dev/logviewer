@@ -13,7 +13,7 @@ import aiohttp
 from core.models import LogEntry
 from core.utils import get_stack_variable, authrequired, User
 
-prefix = os.getenv("URL_PREFIX", "/logs")
+prefix = os.getenv("LOG_URL_PREFIX", "/logs")
 if prefix == "NONE":
     prefix = ""
 
