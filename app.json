@@ -1,10 +1,10 @@
 {
-  "name": "ModMail Log Viewer",
-  "description": "A simple webserver to view selfhosted logs",
+  "name": "Modmail Log Viewer",
+  "description": "A simple webserver to view self-hosted logs",
   "repository": "https://github.com/kyb3r/logviewer",
   "env": {
     "MONGO_URI": {
-        "description": "Mongodb connection uri that contains your modmail logs.",
+        "description": "MongoDB connection URI that contains your modmail logs.",
         "required": true
         }
     }

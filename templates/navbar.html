@@ -1,59 +1,9 @@
-<ul id="dropdown1" class="dropdown-content">
-    <li class='divider' style="background-color:#444649"></li>
-    <li>
-        <a href="/logout"><span style='color:#7289DA'>Logout</span></a>
-    </li>
-</ul>
-        
 <div class='navbar-fixed'>
     <nav class="lighten-1">
         <div class="nav-wrapper container">
             <a id="logo-container" href="/" class="brand-logo">
                 <i class="material-icons" id='dash'>home</i>
             </a>
-
-            {% if app.using_oauth %}
-            
-            <ul class="right hide-on-med-and-down">
-                {% if not session.logged_in %}
-                <li>
-                    <a href="/login" class="waves-effect"><i class="right material-icons" id='dash'>account_circle</i>Login</a>
-                </li>
-                {% else %}
-                <li>
-                    <a class="dropdown-trigger waves-effect" href="#!" data-target="dropdown1">{{ user.name }}
-                        <img class='circle nav-icon' width='25px' src="{{ user.avatar_url }}">
-                    </a>
-                </li>
-                {% endif %}
-            </ul>
-
-            <a href="#!" data-target="nav-mobile" class="button-collapse sidenav-trigger"><i class="material-icons">menu</i></a>
-
-            {% endif %}
         </div>
     </nav>
 </div>
-
-
-<ul id="nav-mobile" class="sidenav"> 
-    {% if not session.logged_in %}
-    <div class="user-view">
-            <div class="background" style='background-color:#2D2F33'>
-            </div>
-            <a><img class="circle" src="https://cdn.discordapp.com/embed/avatars/0.png"></a>
-            <br>
-    </div> 
-    <li><a href="/login" class="waves-effect"><span class="grey-text">Login</span></a></li>
-    {% else %}
-    <div class="user-view">
-        <div class="background" style='background-color:#2D2F33'>
-        </div>
-        <a><img class="circle" src="{{ user.avatar_url }}"></a>
-        <a><span class="grey-text name"><b style='color:white'>{{ user.name}}</b>#{{ user.discriminator }}</span></a>
-        <br>
-    </div> 
-    <li><a href="/logout" class="waves-effect"><span class="grey-text">Logout</span></a></li>
-    <li class='divider' style="background-color:#444649"></li>
-    {% endif %}
-</ul>

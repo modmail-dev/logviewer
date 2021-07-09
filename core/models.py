@@ -4,7 +4,7 @@ import dateutil.parser
 from sanic import response
 from natural.date import duration
 
-from core.formatter import format_content_html
+from .formatter import format_content_html
 
 
 class LogEntry:
@@ -60,7 +60,7 @@ class LogEntry:
         return groups
 
     def render_html(self):
-        return self.app.render_template("logbase", log_entry=self)
+        return self.app.ctx.render_template("logbase", log_entry=self)
 
     def render_plain_text(self):
         messages = self.messages

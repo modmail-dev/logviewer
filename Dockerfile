@@ -1,7 +1,17 @@
-FROM library/python:latest
-RUN apt update && apt install -y pipenv
-RUN mkdir -p /bot && cd /bot && git clone https://github.com/kyb3r/logviewer .
-WORKDIR /bot
-RUN pipenv install
+FROM python:3.9-slim as py
 
-CMD ["pipenv", "run", "python3", "app.py"]
+FROM py as build
+
+RUN apt update && apt install -y g++
+COPY requirements.txt /
+RUN pip install --prefix=/inst -U -r /requirements.txt
+
+FROM py
+
+ENV USING_DOCKER yes
+COPY --from=build /inst /usr/local
+
+WORKDIR /logviewer
+CMD ["python", "app.py"]
+COPY . /logviewer
+
