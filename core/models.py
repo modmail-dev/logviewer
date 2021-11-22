@@ -12,10 +12,10 @@ class LogEntry:
         self.app = app
         self.key = data["key"]
         self.open = data["open"]
-        self.created_at = dateutil.parser.parse(data["created_at"])
+        self.created_at = dateutil.parser.parse(data["created_at"]).astimezone(timezone.utc)
         self.human_created_at = duration(self.created_at, now=datetime.now(timezone.utc))
         self.closed_at = (
-            dateutil.parser.parse(data["closed_at"]) if not self.open else None
+            dateutil.parser.parse(data["closed_at"]).astimezone(timezone.utc) if not self.open else None
         )
         self.channel_id = int(data["channel_id"])
         self.guild_id = int(data["guild_id"])
@@ -165,7 +165,7 @@ class Attachment:
 class Message:
     def __init__(self, data):
         self.id = int(data["message_id"])
-        self.created_at = dateutil.parser.parse(data["timestamp"])
+        self.created_at = dateutil.parser.parse(data["timestamp"]).astimezone(timezone.utc)
         self.human_created_at = duration(self.created_at, now=datetime.now(timezone.utc))
         self.raw_content = data["content"]
         self.content = self.format_html_content(self.raw_content)
