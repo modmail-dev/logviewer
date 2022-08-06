@@ -11,7 +11,7 @@ motor = "~=2.4.0"
 natural = "~=0.2.0"
 pymongo = {version = "*", extras = ['srv']}  # Required by motor
 python-dateutil = "~=2.8.1"
-sanic = "~=21.6.0"
+sanic = "~=21.12.2"
 
 [scripts]
 logviewer = "python app.py"
