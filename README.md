@@ -33,6 +33,29 @@ You can automatically update the logviewer in your Heroku account whenever chang
 
 To enable autoupdates, fork this repo and [install the Pull app in your fork](https://github.com/apps/pull). Then go to the Deploy tab in your Heroku account, select GitHub and connect your fork. Turn on auto-deploy for the master branch.
 
+## Self-Hosting Setup
+
+There are a couple ways you can go about hosting the logviewer. Below is a simple set of instructions to get started!
+
+First, I recommend setting up a vhost and reverse proxy via nginx for the log viewer. Otherwise you'll be accessing it from <IP_OF_VPS>:<LOGVIEWER_PORT>
+A [Guide to setup a reverse proxy](https://www.hostinger.com/tutorials/how-to-set-up-nginx-reverse-proxy/) to help get started.
+Next, ensure you're running Python 3.9 or above [A Quick Guide on how to do this](https://linuxize.com/post/how-to-install-python-3-9-on-ubuntu-20-04/), along with ensuring pip (On Ubuntu, generally `sudo apt-get install python3-pip` is sufficient) is installed as well.
+
+Run the following:
+`git clone https://github.com/kyb3r/logviewer`
+`cd logviewer`
+`python3 -m pip install pipenv`
+`cp .env.example .env`
+
+Edit the `.env` file and fill in your Mongo connection string. If you wish to customize the bind IP and port, you may do so, but I'll be referencing the default port below (8000)
+
+`pipenv install`
+`chmod +x logviewer.sh`
+
+Then to start the app, run `./logviewer.sh`
+
+The app will start by default listening on all interfaces, if unmodified running on port 8000. You can test this is working by navigating to <IP_OF_SERVER>:8000 and should be greeted with the Modmail Logviewer Main Page.
+
 ## Discord OAuth2 
 
 Protecting your logs with a login (Discord Oauth2 support) is a premium feature, only available to [Patrons](https://patreon.com/kyber).
