@@ -25,36 +25,59 @@
 
 ## What is this?
 
-In order for you to view your selfhosted logs, you have to deploy this application. Before you deploy the application, create a config var named `MONGO_URI` and put your MongoDB connection URI from the previous section into the value slot. Take the URL of this app after you deploy it and input it as a config var `LOG_URL` in the Modmail bot app.
+In order for you to view your self-hosted logs, you have to deploy this application. Before you deploy the application, create a config var named `MONGO_URI` and put your MongoDB connection URI from the previous section into the value slot. Take the URL of this app after you deploy it and input it as a config var `LOG_URL` in the Modmail bot app.
 
 ## Updating
 
 You can automatically update the logviewer in your Heroku account whenever changes are made to this repo.
 
-To enable autoupdates, fork this repo and [install the Pull app in your fork](https://github.com/apps/pull). Then go to the Deploy tab in your Heroku account, select GitHub and connect your fork. Turn on auto-deploy for the master branch.
+To enable auto-updates, fork this repo and [install the Pull app in your fork](https://github.com/apps/pull). Then go to the Deploy tab in your Heroku account, select GitHub and connect your fork. Turn on auto-deploy for the master branch.
 
 ## Self-Hosting Setup
 
-There are a couple ways you can go about hosting the logviewer. Below is a simple set of instructions to get started!
+The method of hosting the logviewer depends on your server configurations. 
 
-First, I recommend setting up a vhost and reverse proxy via nginx for the log viewer. Otherwise you'll be accessing it from <IP_OF_VPS>:<LOGVIEWER_PORT>
-A [Guide to setup a reverse proxy](https://www.hostinger.com/tutorials/how-to-set-up-nginx-reverse-proxy/) to help get started.
-Next, ensure you're running Python 3.9 or above [A Quick Guide on how to do this](https://linuxize.com/post/how-to-install-python-3-9-on-ubuntu-20-04/), along with ensuring pip (On Ubuntu, generally `sudo apt-get install python3-pip` is sufficient) is installed as well.
+Below are some general instructions to help you get started on a Linux machine.
 
-Run the following:
-`git clone https://github.com/kyb3r/logviewer`
-`cd logviewer`
-`python3 -m pip install pipenv`
-`cp .env.example .env`
+### Prerequisites
 
-Edit the `.env` file and fill in your Mongo connection string. If you wish to customize the bind IP and port, you may do so, but I'll be referencing the default port below (8000)
+- A [Python 3.9 installation](https://www.python.org/downloads/) with `pip`
+- `git` for your system
 
-`pipenv install`
-`chmod +x logviewer.sh`
+e.g. on Ubuntu: 
+```shell
+sudo apt install software-properties-common python3.9 python3-dev python3-pip
+```
 
-Then to start the app, run `./logviewer.sh`
 
-The app will start by default listening on all interfaces, if unmodified running on port 8000. You can test this is working by navigating to <IP_OF_SERVER>:8000 and should be greeted with the Modmail Logviewer Main Page.
+### Deployment
+
+Run the following shell commands:
+```shell
+git clone https://github.com/kyb3r/logviewer
+cd logviewer
+python3 -m pip install pipenv
+pipenv install
+cp .env.example .env
+```
+Edit the `.env` file (e.g. `nano .env`) and fill in your MongoDB connection URI. 
+
+> You can also customize the bind IP and port in the `.env` file.
+
+Then to start the app, run:
+```shell
+pipenv run logviewer
+```
+
+You can verify the logviewer is working by navigating to `http://<IP_OF_SERVER>:8000` (if you didn't change the bind IP / port) and should be greeted with the Logviewer main page.
+
+To run the program in the background, you can use `screen`. Or you can use a service manager, such as `systemd`, which can also auto-restart the logviewer on failure and after system reboot.
+
+### Advanced
+
+We recommend setting up Nginx reverse proxy to port forward external port 80 to your internal logviewer port and cache static web contents ([tutorial](https://www.hostinger.com/tutorials/how-to-set-up-nginx-reverse-proxy/)).
+
+To accept requests from a domain instead of your server IP, simply set an `A`/`AAAA` record from your DNS record manager that forwards your domain to your server IP.
 
 ## Discord OAuth2 
 
