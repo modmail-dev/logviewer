@@ -1,10 +1,10 @@
-__version__ = "1.1"
+__version__ = "1.1.1"
 
 import os
 
 from motor.motor_asyncio import AsyncIOMotorClient
 from sanic import Sanic, response
-from sanic.exceptions import abort, NotFound
+from sanic.exceptions import NotFound
 from jinja2 import Environment, FileSystemLoader
 
 from core.models import LogEntry
@@ -19,8 +19,11 @@ else:
 if prefix == "NONE":
     prefix = ""
 
-app = Sanic(__name__)
+MONGO_URI = os.getenv("MONGO_URI")
+if not MONGO_URI:
+    MONGO_URI = os.environ['CONNECTION_URI']
 
+app = Sanic(__name__)
 app.static("/static", "./static")
 
 jinja_env = Environment(loader=FileSystemLoader("templates"))
@@ -36,7 +39,7 @@ app.ctx.render_template = render_template
 
 @app.listener("before_server_start")
 async def init(app, loop):
-    app.ctx.db = AsyncIOMotorClient(os.getenv("MONGO_URI")).modmail_bot
+    app.ctx.db = AsyncIOMotorClient(MONGO_URI).modmail_bot
 
 
 @app.exception(NotFound)
@@ -55,7 +58,7 @@ async def get_raw_logs_file(request, key):
     document = await app.ctx.db.logs.find_one({"key": key})
 
     if document is None:
-        abort(404)
+        raise NotFound
 
     log_entry = LogEntry(app, document)
 
@@ -68,7 +71,7 @@ async def get_logs_file(request, key):
     document = await app.ctx.db.logs.find_one({"key": key})
 
     if document is None:
-        abort(404)
+        raise NotFound
 
     log_entry = LogEntry(app, document)
 
