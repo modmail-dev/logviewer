@@ -39,6 +39,8 @@ The method of hosting the logviewer depends on your server configurations.
 
 Below are some general instructions to help you get started on a Linux machine.
 
+The [installation guide](https://localhosting-logviewer.logs.vodka/) will guide you through the entire installation process.
+
 ### Prerequisites
 
 - A [Python 3.9 installation](https://www.python.org/downloads/) with `pip`
