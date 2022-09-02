@@ -115,7 +115,7 @@
                                     {% if attachment.is_image %}
                                     <img class="chatlog__attachment-thumbnail" src="{{ attachment.url }}" alt="attachment"/>
                                     {% else %}
-                                    Attachment: {{ attachment.filename }}
+                                    Attachment: {{ attachment.filename | e }}
                                     {% endif %}
                                 </a>
                             </div>
@@ -132,12 +132,12 @@
                 </div>
                 <div class="chatlog__messages">
                     <span class="chatlog__author-name"
-                          title="{{ log_entry.closer | string | e }}">{{ log_entry.closer.name }}</span>
+                          title="{{ log_entry.closer | string | e }}">{{ log_entry.closer.name | e }}</span>
                     {% if log_entry.closer.mod %}
                         <span>closed the thread</span>
                         <span class="system-tag">System</span>
                     {% endif %}
-                    <span class="chatlog__timestamp">{{ log_entry.human_closed_at }}</span>
+                    <span class="chatlog__timestamp">{{ log_entry.human_closed_at | e }}</span>
                     {% if log_entry.close_message %}
                         <div class="chatlog__content">
                             {{ log_entry.close_message }}
