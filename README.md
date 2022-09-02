@@ -37,9 +37,7 @@ To enable auto-updates, fork this repo and [install the Pull app in your fork](h
 
 The method of hosting the logviewer depends on your server configurations. 
 
-Below are some general instructions to help you get started on a Linux machine.
-
-The [installation guide](https://localhosting-logviewer.logs.vodka/) will guide you through the entire installation process.
+Below are some general instructions to help you get started on a Linux machine. The [installation guide](https://localhosting-logviewer.logs.vodka/) will guide you through the entire installation process.
 
 ### Prerequisites
 
