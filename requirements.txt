@@ -9,6 +9,7 @@ multidict==6.0.2; python_version >= '3.7'
 natural==0.2.0
 pymongo[srv]==4.2.0
 python-dateutil==2.8.2
+python-dotenv==0.18.0
 sanic==22.6.2
 sanic-routing==22.3.0
 six==1.16.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'

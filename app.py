@@ -6,9 +6,11 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from sanic import Sanic, response
 from sanic.exceptions import NotFound
 from jinja2 import Environment, FileSystemLoader
+from dotenv import load_dotenv
 
 from core.models import LogEntry
 
+load_dotenv()
 
 if "URL_PREFIX" in os.environ:
     print("Using the legacy config var `URL_PREFIX`, rename it to `LOG_URL_PREFIX`")
@@ -19,9 +21,10 @@ else:
 if prefix == "NONE":
     prefix = ""
 
-MONGO_URI = os.getenv("MONGO_URI")
+MONGO_URI = os.getenv("MONGO_URI") or os.getenv("CONECTION_URI")
 if not MONGO_URI:
-    MONGO_URI = os.environ['CONNECTION_URI']
+    print("No MONGO_URI config var found. Please enter your MongoDB connection URI in the configuration or .env file.")
+    exit(1)
 
 app = Sanic(__name__)
 app.static("/static", "./static")
