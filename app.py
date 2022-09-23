@@ -21,9 +21,10 @@ else:
 if prefix == "NONE":
     prefix = ""
 
-MONGO_URI = os.getenv("MONGO_URI") or os.getenv("CONECTION_URI")
+MONGO_URI = os.getenv("MONGO_URI") or os.getenv("CONNECTION_URI")
 if not MONGO_URI:
-    print("No MONGO_URI config var found. Please enter your MongoDB connection URI in the configuration or .env file.")
+    print("No CONNECTION_URI config var found. "
+          "Please enter your MongoDB connection URI in the configuration or .env file.")
     exit(1)
 
 app = Sanic(__name__)
