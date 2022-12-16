@@ -110,6 +110,15 @@ class LogEntry:
 
         return response.text(out)
 
+class LogList:
+    def __init__(self, app, data, prefix):
+        self.app = app
+        self.logs = data
+        self.prefix = prefix
+
+    def render_html(self):
+        return self.app.ctx.render_template("loglist", data=self)
+
 
 class User:
     def __init__(self, data):

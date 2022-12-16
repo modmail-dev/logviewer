@@ -4,35 +4,35 @@
     font-family: Whitney;
     font-style: light;
     font-weight: 300;
-    src: url(https://discordapp.com/assets/6c6374bad0b0b6d204d8d6dc4a18d820.woff) format('woff');
+    src: url('../fonts/whitney-light.woff') format('woff');
   }
   
 @font-face {
     font-family: Whitney;
     font-style: normal;
     font-weight: 500;
-    src: url(https://discordapp.com/assets/e8acd7d9bf6207f99350ca9f9e23b168.woff) format('woff');
+    src: url('../fonts/whitney-normal.woff') format('woff');
   }
   
 @font-face {
     font-family: Whitney;
     font-style: medium;
     font-weight: 600;
-    src: url(https://discordapp.com/assets/3bdef1251a424500c1b3a78dea9b7e57.woff) format('woff');
+    src: url('../fonts/whitney.woff') format('woff');
   }
   
 @font-face {
     font-family: WhitneyMedium;
     font-style: medium;
     font-weight: 600;
-    src: url(https://discordapp.com/assets/be0060dafb7a0e31d2a1ca17c0708636.woff) format('woff');
+    src: url('../fonts/whitney-medium.woff') format('woff');
   }
   
 @font-face {
     font-family: Whitney;
     font-style: bold;
     font-weight: 700;
-    src: url(https://discordapp.com/assets/8e12fb4f14d9c4592eb8ec9f22337b04.woff) format('woff');
+    src: url('../fonts/whitney-bold.woff') format('woff');
   }
 
 a {
@@ -54,13 +54,28 @@ img {
     font-weight: 600;
     color: rgba(255, 255, 255, 0.774)!important;
     margin-left: 6px;
-    padding: 1px 2px;
+    padding: 3px 5px;
     border-radius: 3px;
     text-transform: uppercase;
     vertical-align: bottom;
-    line-height: 16px;
+    line-height: 25px;
     -ms-flex-negative: 0;
     flex-shrink: 0
+}
+
+.red-tag {
+	background: rgba(204, 46, 80, 0.75);
+	font-size: 10px;
+	font-weight: 600;
+	color: rgba(255, 255, 255, 0.774)!important;
+	margin-left: 6px;
+	padding: 3px 5px;
+	border-radius: 3px;
+	text-transform: uppercase;
+	vertical-align: bottom;
+	line-height: 25px;
+	-ms-flex-negative: 0;
+	flex-shrink: 0
 }
 
 .system-tag {
@@ -69,11 +84,11 @@ img {
     font-weight: 600;
     color: #fff!important;
     margin-left: 6px;
-    padding: 1px 2px;
+    padding: 3px 5px;
     border-radius: 3px;
     text-transform: uppercase;
     vertical-align: bottom;
-    line-height: 16px;
+    line-height: 25px;
     -ms-flex-negative: 0;
     flex-shrink: 0
 }
@@ -84,17 +99,17 @@ img {
     font-weight: 600;
     color: #fff!important;
     margin-left: 6px;
-    padding: 1px 2px;
+    padding: 3px 5px;
     border-radius: 3px;
     text-transform: uppercase;
     vertical-align: bottom;
-    line-height: 16px;
+    line-height: 25px;
     -ms-flex-negative: 0;
     flex-shrink: 0
 }
 
 .button {
-    align-co: right;
+    align-content: right;
     background-color:#7289da; 
     color: rgba(255, 255, 255, 0.7);
     border:transparent; 
@@ -164,7 +179,7 @@ img {
 }
 
 .info__guild-name {
-    font-size: 1.4em;
+    font-size: 24px;
 }
 
 .info__channel-name {
@@ -205,11 +220,11 @@ body {
 
 @media (max-width: 800px) {
     .entry {
-        font-size: 85%
+        font-size: 16px;
     }
 
     .pre--inline {
-        font-size: 85%
+        font-size: 16px
     }
 }
 
@@ -256,23 +271,23 @@ body {
 }
 
 .chatlog__author-name {
-    font-size: 1em;
+    font-size: 18px;
 }
 
 .chatlog__timestamp {
     margin-left: 5px;
-    font-size: .75em;
+    font-size: 14px;
 }
 
 .chatlog__content {
     padding-top: 5px;
-    font-size: .9375em;
+    font-size: 16px;
     word-wrap: break-word;
 }
 
 .chatlog__edited-timestamp {
     margin-left: 5px;
-    font-size: .8em;
+    font-size: 14px;
 }
 
 .chatlog__attachment {

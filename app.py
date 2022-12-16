@@ -8,7 +8,8 @@ from sanic import Sanic, response
 from sanic.exceptions import NotFound
 from jinja2 import Environment, FileSystemLoader
 
-from core.models import LogEntry
+from core.models import LogEntry, LogList
+from core.utils import loglist
 
 load_dotenv()
 
@@ -53,7 +54,20 @@ async def not_found(request, exc):
 
 @app.get("/")
 async def index(request):
-    return render_template("index")
+    return render_template("index", prefix=prefix)
+
+
+@app.get(prefix)
+@loglist()
+async def get_log_list(request, document):
+    """Returns the html rendered log list"""
+
+    if document is None:
+        raise NotFound
+
+    log_list = LogList(app, document, prefix)
+
+    return log_list.render_html()
 
 
 @app.get(prefix + "/raw/<key>")
