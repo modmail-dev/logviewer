@@ -39,13 +39,12 @@
 			<div class="info__metadata">
 				<div class="info__guild-name">Greetings, <span style='color:white'>visitor.</span>
 				</div>
-				<div title="" class="info__channel-topic tooltip">There's currently
-					<span style="color:white"><b>{{ data.logs | length }}</b> threads</span> stored in my database.
+				<div title="" class="info__channel-topic tooltip">Displaying 
+					<span style="color:white"><b>{{ data.logs | length }}</b> threads</span> sorted by recent creation date.
 				</div>
 				<div class="info__channel-message-count">
-					<a style="color: gray;" href="https://github.com/raidensakura">with 💖 by raidensakura</a> ;
-					<a style="color: gray;" href="https://github.com/khakers/modmail-viewer">inspired by
-						khakers</a>
+					<a style="color: gray;" href="/">Return to home</a> ;
+					<a style="color: gray;" href="javascript:selectRandomThread()">🎲 Select a random thread</a>
 				</div>
 				<br>
 			</div>
@@ -77,9 +76,7 @@
 							<tr class="tr-nbb">
 								<td class="td-npy">Thread ID:</td>
 								<td class="td-npy">
-									<span class='tooltiptext pre pre--inline'><a href="{{ data.prefix }}/{{ log._id }}"
-											style="text-transform:uppercase;"> {{
-											log._id }} </a></span>
+									<span class='tooltiptext pre pre--inline thread-id'><a class='thread-href' href="{{ data.prefix }}/{{ log._id }}"> {{ log._id }} </a></span>
 								</td>
 							</tr>
 							<tr class="tr-nbb">
@@ -185,15 +182,12 @@
 			});
 		});
 
-		function toggleInternalMessages() {
-			let messages = document.getElementsByClassName('internal')
-			for (let m of messages) {
-				if (m.style.display === "none") {
-					m.style.display = "flex";
-				} else {
-					m.style.display = "none";
-				}
-			}
+
+		function selectRandomThread() {
+			let threads_arr = document.getElementsByClassName('thread-href')
+			let random_thread = threads_arr[Math.floor(Math.random() * threads_arr.length)];
+			console.log($(random_thread).attr('href'))
+			return window.location.href = $(random_thread).attr('href')
 		}
 
 	</script>
