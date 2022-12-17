@@ -22,6 +22,10 @@ def format_content_html(content: str, allow_links: bool = False) -> str:
     # Encode inline codeblocks (`text`)
     content = re.sub(r"`([^`]+)`", encode_inline_codeblock, content)
 
+    # Encode inline blockquotes (> test)
+    # Multiline blockquotes (>>> test) are saved as single in Mongo (> test)
+    content = re.sub(r"(&gt; )([^\n]+)", r"<blockquote>\2</blockquote>", content)
+
     # Encode links
     if allow_links:
 
