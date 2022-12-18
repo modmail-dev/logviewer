@@ -4,6 +4,10 @@ from datetime import datetime, timezone
 import dateutil.parser
 from natural.date import duration
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def loglist():
     def decorator(func):
@@ -15,12 +19,27 @@ def loglist():
 
             collection = app.ctx.db.logs
 
+            try:
+                page = int(request.args.get("page", 1))
+            except ValueError:
+                page = 1
+
             def parse_date(date):
                 date = dateutil.parser.parse(date).astimezone(timezone.utc)
                 timestamp = duration(date, datetime.now(timezone.utc))
                 return timestamp
 
             async def find():
+
+                if "PAGINATION" in os.environ:
+                    try:
+                        logs_per_page = int(os.environ["PAGINATION"])
+                    except ValueError:
+                        print("Invalid PAGINATION config var (must be a number). Defaulting to 25.")
+                        logs_per_page = 25
+                
+                print(logs_per_page)
+
                 filter_ = {"bot_id": str(config["bot_id"])}
                 projection_ = {
                     "_id": 1,
@@ -34,11 +53,16 @@ def loglist():
                     "messages": 1,
                 }
 
-                cursor = collection.find(filter=filter_, projection=projection_).sort(
+                cursor = collection.find(filter=filter_, projection=projection_, skip=(page-1)*logs_per_page).sort(
                     "created_at", -1
                 )
 
-                items = await cursor.to_list(length=100)
+                count = await collection.count_documents(filter=filter_)
+
+                max_page = round(count / logs_per_page)
+                if (count % logs_per_page) > 0: max_page += 1
+
+                items = await cursor.to_list(length=logs_per_page)
                 
                 # iterate over list to change timestamps to readable format
                 for index, item in enumerate(items):
@@ -54,10 +78,10 @@ def loglist():
                     items[index]['last_message_time'] = last_message_duration
 
 
-                return items
+                return items, max_page
 
-            document = await find()
-            return await func(request, document)
+            document, max_page = await find()
+            return await func(request, document, page, max_page)
 
         return wrapper
 

@@ -111,10 +111,12 @@ class LogEntry:
         return response.text(out)
 
 class LogList:
-    def __init__(self, app, data, prefix):
+    def __init__(self, app, data, prefix, page, max_page):
         self.app = app
         self.logs = data
         self.prefix = prefix
+        self.page = page
+        self.max_page = max_page
 
     def render_html(self):
         return self.app.ctx.render_template("loglist", data=self)

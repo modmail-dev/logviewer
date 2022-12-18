@@ -4646,6 +4646,17 @@ nav ul a.btn-floating {
 	margin-right: 15px;
 }
 
+div.pagination a.btn,
+div.pagination a.btn-large,
+div.pagination a.btn-small,
+div.pagination a.btn-large,
+div.pagination a.btn-flat,
+div.pagination a.btn-floating {
+	margin-top: 10px;
+	margin-right: 5px;
+	margin-bottom: 10px;
+}
+
 nav ul a.btn>.material-icons,
 nav ul a.btn-large>.material-icons,
 nav ul a.btn-small>.material-icons,
