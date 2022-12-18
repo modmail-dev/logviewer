@@ -37,12 +37,9 @@ def loglist():
                     except ValueError:
                         print("Invalid PAGINATION config var (must be a number). Defaulting to 25.")
                         logs_per_page = 25
-                
-                print(logs_per_page)
 
                 filter_ = {"bot_id": str(config["bot_id"])}
                 projection_ = {
-                    "_id": 1,
                     "key": 1,
                     "open": 1,
                     "created_at": 1,
@@ -50,7 +47,7 @@ def loglist():
                     "recipient": 1,
                     "creator": 1,
                     "title": 1,
-                    "messages": 1,
+                    "messages": { "$arrayElemAt": [ "$messages", -1 ] }
                 }
 
                 cursor = collection.find(filter=filter_, projection=projection_, skip=(page-1)*logs_per_page).sort(
@@ -73,8 +70,8 @@ def loglist():
                     if close_date is not None:
                         items[index].update(closed_at=parse_date(close_date))
 
-                    messages = items[index].get('messages') # this returns the last message in array
-                    last_message_duration = parse_date(messages[-1].get('timestamp'))
+                    last_message = items[index].get('messages')
+                    last_message_duration = parse_date(last_message.get('timestamp'))
                     items[index]['last_message_time'] = last_message_duration
 
 

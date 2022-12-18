@@ -40,7 +40,7 @@
 				<div class="info__guild-name">Greetings, <span style='color:white'>visitor.</span>
 				</div>
 				<div title="" class="info__channel-topic tooltip">Displaying
-					<span style="color:white"><b>{{ data.logs | length }}</b> threads</span> in 
+					<span style="color:white"><b>{{ data.logs | length }}</b> threads</span> in
 					<span style="color:white">page <b>{{ data.page }}</b></span>
 					sorted by latest creation date first.
 				</div>
@@ -50,6 +50,26 @@
 				</div>
 				<br>
 			</div>
+		</div>
+		<div class="pagination">
+			{% if data.page != 1 %}
+			<a href="?page=1" class="btn waves-effect">
+				<i class="material-icons">first_page</i>
+			</a>
+			{% endif %}
+			{% if data.page > 1 %}
+			<a href="?page={{ data.page - 1 }}" class="btn waves-effect">
+				<i class="material-icons">chevron_left</i>
+			</a>
+			{% endif %}
+			{% if data.page < data.max_page %} <a href="?page={{ data.page + 1 }}" class="btn waves-effect">
+				<i class="material-icons">chevron_right</i>
+				</a>
+				{% endif %}
+				{% if data.page < data.max_page %} <a href="?page={{ data.max_page }}" class="btn waves-effect">
+					<i class="material-icons">last_page</i>
+					</a>
+					{% endif %}
 		</div>
 		<div class="chatlog">
 			{% for log in data.logs %}
@@ -73,12 +93,13 @@
 						Closed {{ log.closed_at[:19] }}
 						{% endif %}
 					</span>
-					<div class="chatlog__content" id="{{ log._id }}">
+					<div class="chatlog__content" id="{{ log.key }}">
 						<table class="auto-width">
 							<tr class="tr-nbb">
 								<td class="td-npy">Thread ID:</td>
 								<td class="td-npy">
-									<a class='log-button thread-href' href="{{ data.prefix }}/{{ log._id }}"> {{ log._id }} </a>
+									<a class='log-button thread-href' href="{{ data.prefix }}/{{ log.key }}"> {{ log.key
+										}} </a>
 								</td>
 							</tr>
 							<tr class="tr-nbb">
@@ -120,16 +141,14 @@
 				<i class="material-icons">chevron_left</i>
 			</a>
 			{% endif %}
-			{% if data.page < data.max_page %}
-			<a href="?page={{ data.page + 1 }}" class="btn waves-effect">
+			{% if data.page < data.max_page %} <a href="?page={{ data.page + 1 }}" class="btn waves-effect">
 				<i class="material-icons">chevron_right</i>
-			</a>
-			{% endif %}
-			{% if data.page < data.max_page %}
-			<a href="?page={{ data.max_page }}" class="btn waves-effect">
-				<i class="material-icons">last_page</i>
-			</a>
-			{% endif %}
+				</a>
+				{% endif %}
+				{% if data.page < data.max_page %} <a href="?page={{ data.max_page }}" class="btn waves-effect">
+					<i class="material-icons">last_page</i>
+					</a>
+					{% endif %}
 		</div>
 	</div>
 	<script>
