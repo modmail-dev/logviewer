@@ -39,14 +39,14 @@
 			<div class="info__metadata">
 				<div class="info__guild-name">Greetings, <span style='color:white'>visitor.</span>
 				</div>
-				<div title="" class="info__channel-topic tooltip">Displaying
+				<div class="info__channel-topic tooltip">Displaying
 					<span style="color:white"><b>{{ data.logs | length }}</b> threads</span> in
 					<span style="color:white">page <b>{{ data.page }}</b></span>
 					sorted by latest creation date first.
 				</div>
 				<div class="info__channel-message-count">
 					<a style="color: gray;" href="/">Return to home</a> ;
-					<a style="color: gray;" href="javascript:selectRandomThread()">🎲 View random thread from page</a>
+					<a style="color: gray;" href="javascript:selectRandomThread()">🎲 View random thread in page</a>
 				</div>
 				<br>
 			</div>
@@ -62,14 +62,16 @@
 				<i class="material-icons">chevron_left</i>
 			</a>
 			{% endif %}
-			{% if data.page < data.max_page %} <a href="?page={{ data.page + 1 }}" class="btn waves-effect">
+			{% if data.page < data.max_page %}
+			<a href="?page={{ data.page + 1 }}" class="btn waves-effect">
 				<i class="material-icons">chevron_right</i>
-				</a>
-				{% endif %}
-				{% if data.page < data.max_page %} <a href="?page={{ data.max_page }}" class="btn waves-effect">
-					<i class="material-icons">last_page</i>
-					</a>
-					{% endif %}
+			</a>
+			{% endif %}
+			{% if data.page < data.max_page %}
+			<a href="?page={{ data.max_page }}" class="btn waves-effect">
+				<i class="material-icons">last_page</i>
+			</a>
+			{% endif %}
 		</div>
 		<div class="chatlog">
 			{% for log in data.logs %}
@@ -87,10 +89,8 @@
 					{% if log.nsfw %} <span class="internal-tag">NSFW</span>
 					{% endif %}
 					<span class="chatlog__timestamp">
-						{% if log.open %}
-						Opened {{ log.created_at[:19] }}
-						{% else %}
-						Closed {{ log.closed_at[:19] }}
+						{% if log.open %} Opened {{ log.created_at[:19] }}
+						{% else %} Closed {{ log.closed_at[:19] }}
 						{% endif %}
 					</span>
 					<div class="chatlog__content" id="{{ log.key }}">
@@ -98,18 +98,16 @@
 							<tr class="tr-nbb">
 								<td class="td-npy">Thread ID:</td>
 								<td class="td-npy">
-									<a class='log-button thread-href' href="{{ data.prefix }}/{{ log.key }}"> {{ log.key
-										}} </a>
+									<a class='log-button thread-href' href="{{ data.prefix }}/{{ log.key }}"> {{ log.key }} </a>
 								</td>
 							</tr>
 							<tr class="tr-nbb">
 								<td class="td-npy">Recipient:</td>
 								<td class="td-npy">
-
-									<div title="{{log.recipient.id}}" class="info__channel-topic tooltip"><span
+									<div title="{{ log.recipient.id }}" class="info__channel-topic tooltip"><span
 											style="color:white">
-											{{log.recipient.name}}</span>#{{log.recipient.discriminator}}
-										<span class="tooltiptext pre pre--inline">{{log.recipient.id}}</span>
+											{{ log.recipient.name | e }}</span>#{{ log.recipient.discriminator }}
+										<span class="tooltiptext pre pre--inline">{{ log.recipient.id }}</span>
 									</div>
 								</td>
 							</tr>
@@ -117,7 +115,7 @@
 								<td class="td-npy">Content:</td>
 								<td class="td-npy">
 									<span class='tooltiptext pre pre--inline'> {{ log.messages | length }} </span>
-									total message{%if log.messages | length > 1 %}s{% endif %}
+									total message{% if log.messages | length > 1 %}s{% endif %}
 								</td>
 							</tr>
 							<tr class="tr-nbb">
@@ -141,14 +139,16 @@
 				<i class="material-icons">chevron_left</i>
 			</a>
 			{% endif %}
-			{% if data.page < data.max_page %} <a href="?page={{ data.page + 1 }}" class="btn waves-effect">
+			{% if data.page < data.max_page %}
+			<a href="?page={{ data.page + 1 }}" class="btn waves-effect">
 				<i class="material-icons">chevron_right</i>
-				</a>
-				{% endif %}
-				{% if data.page < data.max_page %} <a href="?page={{ data.max_page }}" class="btn waves-effect">
-					<i class="material-icons">last_page</i>
-					</a>
-					{% endif %}
+			</a>
+			{% endif %}
+			{% if data.page < data.max_page %}
+			<a href="?page={{ data.max_page }}" class="btn waves-effect">
+				<i class="material-icons">last_page</i>
+			</a>
+			{% endif %}
 		</div>
 	</div>
 	<script>
@@ -171,7 +171,6 @@
 		}
 
 		function highlightMessage() {
-
 			let message_id = document.location.hash.split('#')[1]
 			if (message_id) {
 				msg = document.getElementById(message_id)
@@ -223,7 +222,6 @@
 				hljs.highlightBlock(block);
 			});
 		});
-
 
 		function selectRandomThread() {
 			let threads_arr = document.getElementsByClassName('thread-href')
