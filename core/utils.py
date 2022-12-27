@@ -22,6 +22,11 @@ def loglist():
             try:
                 page = int(request.args.get("page", 1))
                 if page < 1: page = 1
+
+                query = request.args.get("search")
+                
+
+
             except ValueError:
                 page = 1
 
@@ -40,6 +45,10 @@ def loglist():
                         logs_per_page = 25
 
                 filter_ = {"bot_id": str(config["bot_id"])}
+
+                if query is not None: filter_["recipient.id"] = query 
+
+
                 projection_ = {
                     "key": 1,
                     "open": 1,
@@ -48,7 +57,8 @@ def loglist():
                     "recipient": 1,
                     "creator": 1,
                     "title": 1,
-                    "messages": { "$arrayElemAt": [ "$messages", -1 ] }
+                    "last_message": { "$arrayElemAt": [ "$messages", -1 ] },
+                    "message_count": { "$size": "$messages" }
                 }
 
                 cursor = collection.find(filter=filter_, projection=projection_, skip=(page-1)*logs_per_page).sort(
@@ -71,7 +81,7 @@ def loglist():
                     if close_date is not None:
                         items[index].update(closed_at=parse_date(close_date))
 
-                    last_message = items[index].get('messages')
+                    last_message = items[index].get('last_message')
                     last_message_duration = parse_date(last_message.get('timestamp'))
                     items[index]['last_message_time'] = last_message_duration
 
