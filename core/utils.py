@@ -30,11 +30,6 @@ def loglist():
             try:
                 page = int(request.args.get("page", 1))
                 if page < 1: page = 1
-
-                status_open = request.args.get("open")
-
-                search = request.args.get("search")
-
             except ValueError:
                 page = 1
 
@@ -47,10 +42,19 @@ def loglist():
 
                 filter_ = {"bot_id": str(config["bot_id"])}
 
-                if status_open == "false": filter_["open"] = False
-                if status_open == "true": filter_["open"] = True
-                
-                if search: filter_["$text"] = { "$search": search }
+                count_all = await collection.count_documents(filter=filter_)
+
+                status_open = request.args.get("open")
+
+                if status_open == "false":
+                    filter_["open"] = False
+                elif status_open == "true":
+                    filter_["open"] = True
+                else: status_open = None
+
+                if request.args.get("search"): 
+                    search = request.args.get("search")
+                    filter_["$text"] = { "$search": search }
 
                 projection_ = {
                     "key": 1,
@@ -88,11 +92,10 @@ def loglist():
                     last_message_duration = parse_date(last_message.get('timestamp'))
                     items[index]['last_message_time'] = last_message_duration
 
+                return items, max_page, status_open, count_all
 
-                return items, max_page
-
-            document, max_page = await find()
-            return await func(request, document, page, max_page, status_open)
+            document, max_page, status_open, count_all = await find()
+            return await func(request, document, page, max_page, status_open, count_all)
 
         return wrapper
 

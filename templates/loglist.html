@@ -31,55 +31,33 @@
 		<br>
 		<div class="info">
 			<div class="info__guild-icon-container">
-				<img class="info__guild-icon hoverable" src="/static/img/avatar_default.jpg" alt="avatar">
+				<img class="info__guild-icon hoverable" src="/static/img/avatar_modmail.png" alt="avatar">
 			</div>
 			<div class="info__metadata">
-				<div class="info__guild-name">Greetings, <span style='color:white'>visitor.</span>
+				<div class="info__guild-name">Modmail <span style='color:white'>Logviewer.</span>
 				</div>
 				<div class="info__channel-topic tooltip">Displaying
-					<span style="color:white"><b>{{ data.logs | length }}</b> threads</span> in
+					<span style="color:white"><b>{{ data.logs | length }}</b> out of <b>{{ data.count_all }}</b> threads</span> in
 					<span style="color:white">page <b>{{ data.page }}</b></span>
 					sorted by latest creation date first.
 				</div>
 				<div class="info__channel-message-count">
-					<a style="color: gray;" href="/">Return to home</a> ;
+					<a style="color: gray;" href="{{ data.prefix }}">🧵 View all threads</a> ;
+					{% if data.logs %}
 					<a style="color: gray;" href="javascript:selectRandomThread()">🎲 View random thread in page</a>
+					{% endif %}
 				</div>
 			</div>
 		</div>
-		<div class="pagination">
-			{% if data.page != 1 %}
-			<a href="?page=1&open={{ data.status_open }}" class="btn waves-effect">
-				<i class="material-icons">first_page</i>
-			</a>
-			{% endif %}
-			{% if data.page > 1 %}
-			<a href="?page={{ data.page - 1 }}&open={{ data.status_open }}" class="btn waves-effect">
-				<i class="material-icons">chevron_left</i>
-			</a>
-			{% endif %}
-			{% if data.page < data.max_page %}
-			<a href="?page={{ data.page + 1 }}&open={{ data.status_open }}" class="btn waves-effect">
-				<i class="material-icons">chevron_right</i>
-			</a>
-			{% endif %}
-			{% if data.page < data.max_page %} <a href="?page={{ data.max_page }}&open={{ data.status_open }}" class="btn waves-effect">
-				<i class="material-icons">last_page</i>
-			</a>
-			{% endif %}
-			<a href="?page={{ data.page }}&open=true" class="btn waves-effect"{% if data.status_open == 'true' %}style="background-color: rgb(64, 69, 75);"{% endif %}>
-				<i class="material-icons">pending</i>&nbsp;Open
-			</a>
-			<a href="?page={{ data.page }}&open=false" class="btn waves-effect" {% if data.status_open == 'false' %}style="background-color: rgb(64, 69, 75);"{% endif %}>
-				<i class="material-icons">done_all</i>&nbsp;Closed
-			</a>
-		</div>
+
+		{% include 'pagination.html' %}
+		
 		<div class="chatlog">
 			{% for log in data.logs %}
 			<div class="chatlog__message-group active_hover" onclick="hoverIt(this)">
 				<div class="chatlog__author-avatar-container">
 					<img class="chatlog__author-avatar" src="{{ log.creator.avatar_url }}"
-						onerror="this.src='/static/img/avatar_default.jpg'" alt="avatar" />
+						onerror="this.src='/static/img/avatar_default.png'" alt="avatar" />
 				</div>
 				<div class="chatlog__messages">
 					<span class="chatlog__author-name" title="{{ log.creator.id }}">
@@ -90,8 +68,8 @@
 					{% if log.nsfw %} <span class="internal-tag">NSFW</span>
 					{% endif %}
 					<span class="chatlog__timestamp">
-						{% if log.open %} Opened {{ log.created_at[:19] }}
-						{% else %} Closed {{ log.closed_at[:19] }}
+						{% if log.open %} Opened {{ log.created_at }}
+						{% else %} Closed {{ log.closed_at }}
 						{% endif %}
 					</span>
 					<div class="chatlog__content" id="{{ log.key }}">
@@ -99,16 +77,14 @@
 							<tr class="tr-nbb">
 								<td class="td-npy">Thread ID:</td>
 								<td class="td-npy">
-									<a class='log-button thread-href' href="{{ data.prefix }}/{{ log.key }}"> {{ log.key
-										}} </a>
+									<a class='log-button thread-href' href="{{ data.prefix }}/{{ log.key }}">{{ log.key }}</a>
 								</td>
 							</tr>
 							<tr class="tr-nbb">
 								<td class="td-npy">Recipient:</td>
 								<td class="td-npy">
-									<div title="{{ log.recipient.id }}" class="info__channel-topic tooltip"><span
-											style="color:white">
-											{{ log.recipient.name | e }}</span>#{{ log.recipient.discriminator }}
+									<div title="{{ log.recipient.id }}" class="info__channel-topic tooltip">
+										<span style="color:white">{{ log.recipient.name | e }}</span>#{{ log.recipient.discriminator }}
 										<span class="tooltiptext pre pre--inline">{{ log.recipient.id }}</span>
 									</div>
 								</td>
@@ -129,34 +105,30 @@
 				</div>
 			</div>
 			{% endfor %}
+
+			{% if not data.logs %}
+			<div class="chatlog__message-group active_hover" onclick="hoverIt(this)">
+				<div class="chatlog__author-avatar-container">
+					<img class="chatlog__author-avatar" src="/static/img/mei.png" />
+				</div>
+				<div class="chatlog__messages">
+					<span class="chatlog__author-name">
+						<b>Mei</b></span>#Raiden
+					<span class="internal-tag">404</span>
+					<span class="chatlog__timestamp">
+						Herrscher of Thunder
+					</span>
+					<div class="chatlog__content" id="nothing">
+						Nothing was found with that search term, but you found Mei instead.
+					</div>
+				</div>
+			</div>
+			{% endif %}
+
 		</div>
-		<div class="pagination">
-			{% if data.page != 1 %}
-			<a href="?page=1&open={{ data.status_open }}" class="btn waves-effect">
-				<i class="material-icons">first_page</i>
-			</a>
-			{% endif %}
-			{% if data.page > 1 %}
-			<a href="?page={{ data.page - 1 }}&open={{ data.status_open }}" class="btn waves-effect">
-				<i class="material-icons">chevron_left</i>
-			</a>
-			{% endif %}
-			{% if data.page < data.max_page %}
-			<a href="?page={{ data.page + 1 }}&open={{ data.status_open }}" class="btn waves-effect">
-				<i class="material-icons">chevron_right</i>
-			</a>
-			{% endif %}
-			{% if data.page < data.max_page %} <a href="?page={{ data.max_page }}&open={{ data.status_open }}" class="btn waves-effect">
-				<i class="material-icons">last_page</i>
-			</a>
-			{% endif %}
-			<a href="?page={{ data.page }}&open=true" class="btn waves-effect"{% if data.status_open == 'true' %}style="background-color: rgb(64, 69, 75);"{% endif %}>
-				<i class="material-icons">pending</i>&nbsp;Open
-			</a>
-			<a href="?page={{ data.page }}&open=false" class="btn waves-effect" {% if data.status_open == 'false' %}style="background-color: rgb(64, 69, 75);"{% endif %}>
-				<i class="material-icons">done_all</i>&nbsp;Closed
-			</a>
-		</div>
+
+		{% include 'pagination.html' %}
+
 	</div>
 	<script>
 
@@ -233,8 +205,13 @@
 		function selectRandomThread() {
 			let threads_arr = document.getElementsByClassName('thread-href')
 			let random_thread = threads_arr[Math.floor(Math.random() * threads_arr.length)];
-			console.log($(random_thread).attr('href'))
 			return window.location.href = $(random_thread).attr('href')
+		}
+
+		function searchThread() {
+			let q = $("#searchbar").val();
+			let url = window.location.pathname
+			return window.location.href = `${url}?search=${q}`
 		}
 
 	</script>

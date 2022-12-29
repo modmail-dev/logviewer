@@ -1,0 +1,32 @@
+<div class="pagination">
+	{% if data.page != 1 %}
+	<a href="?page=1&open={{ data.status_open }}" class="btn waves-effect">
+		<i class="material-icons">first_page</i>
+	</a>
+	{% endif %}
+	{% if data.page > 1 %}
+	<a href="?page={{ data.page - 1 }}&open={{ data.status_open }}" class="btn waves-effect">
+		<i class="material-icons">chevron_left</i>
+	</a>
+	{% endif %}
+	{% if data.page < data.max_page %}
+	<a href="?page={{ data.page + 1 }}&open={{ data.status_open }}" class="btn waves-effect">
+		<i class="material-icons">chevron_right</i>
+	</a>
+	{% endif %}
+	{% if data.page < data.max_page %}
+	<a href="?page={{ data.max_page }}&open={{ data.status_open }}" class="btn waves-effect">
+		<i class="material-icons">last_page</i>
+	</a>
+	{% endif %}
+	<a href="?page={{ data.page }}&open=true" class="btn waves-effect" {% if data.status_open=='true'%}style="background-color: rgb(64, 69, 75);"{% endif %}>
+		<i class="material-icons">sms</i>&nbsp;Open
+	</a>
+	<a href="?page={{ data.page }}&open=false" class="btn waves-effect" {% if data.status_open=='false' %}style="background-color: rgb(64, 69, 75);"{% endif %}>
+		<i class="material-icons">done_all</i>&nbsp;Closed
+	</a>
+	<input class="input-field" type="text" placeholder="Search" name="search" id="searchbar">
+	<a href="#" class="btn waves-effect" onclick="searchThread()">
+		<i class="material-icons">search</i>
+	</a>
+</div>
