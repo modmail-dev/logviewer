@@ -59,13 +59,13 @@ async def index(request):
 
 @app.get(prefix)
 @loglist()
-async def get_log_list(request, document, page, max_page):
+async def get_log_list(request, document, page, max_page, status_open):
     """Returns the html rendered log list"""
 
     if document is None:
         raise NotFound
 
-    log_list = LogList(app, document, prefix, page, max_page)
+    log_list = LogList(app, document, prefix, page, max_page, status_open)
 
     return log_list.render_html()
 

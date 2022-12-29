@@ -21,16 +21,13 @@
 </head>
 
 <body>
-
 	{% block navbar %}
 
 	{% include 'navbar.html' %}
 
 	{% endblock %}
 
-
 	<div class='entry'>
-
 		<br>
 		<div class="info">
 			<div class="info__guild-icon-container">
@@ -48,28 +45,34 @@
 					<a style="color: gray;" href="/">Return to home</a> ;
 					<a style="color: gray;" href="javascript:selectRandomThread()">🎲 View random thread in page</a>
 				</div>
-				<br>
 			</div>
 		</div>
 		<div class="pagination">
 			{% if data.page != 1 %}
-			<a href="?page=1" class="btn waves-effect">
+			<a href="?page=1&open={{ data.status_open }}" class="btn waves-effect">
 				<i class="material-icons">first_page</i>
 			</a>
 			{% endif %}
 			{% if data.page > 1 %}
-			<a href="?page={{ data.page - 1 }}" class="btn waves-effect">
+			<a href="?page={{ data.page - 1 }}&open={{ data.status_open }}" class="btn waves-effect">
 				<i class="material-icons">chevron_left</i>
 			</a>
 			{% endif %}
-			{% if data.page < data.max_page %} <a href="?page={{ data.page + 1 }}" class="btn waves-effect">
+			{% if data.page < data.max_page %}
+			<a href="?page={{ data.page + 1 }}&open={{ data.status_open }}" class="btn waves-effect">
 				<i class="material-icons">chevron_right</i>
-				</a>
-				{% endif %}
-				{% if data.page < data.max_page %} <a href="?page={{ data.max_page }}" class="btn waves-effect">
-					<i class="material-icons">last_page</i>
-					</a>
-					{% endif %}
+			</a>
+			{% endif %}
+			{% if data.page < data.max_page %} <a href="?page={{ data.max_page }}&open={{ data.status_open }}" class="btn waves-effect">
+				<i class="material-icons">last_page</i>
+			</a>
+			{% endif %}
+			<a href="?page={{ data.page }}&open=true" class="btn waves-effect"{% if data.status_open == 'true' %}style="background-color: rgb(64, 69, 75);"{% endif %}>
+				<i class="material-icons">pending</i>&nbsp;Open
+			</a>
+			<a href="?page={{ data.page }}&open=false" class="btn waves-effect" {% if data.status_open == 'false' %}style="background-color: rgb(64, 69, 75);"{% endif %}>
+				<i class="material-icons">done_all</i>&nbsp;Closed
+			</a>
 		</div>
 		<div class="chatlog">
 			{% for log in data.logs %}
@@ -79,7 +82,7 @@
 						onerror="this.src='/static/img/avatar_default.jpg'" alt="avatar" />
 				</div>
 				<div class="chatlog__messages">
-					<span class="chatlog__author-name title=" {{ log.creator.id }}">
+					<span class="chatlog__author-name" title="{{ log.creator.id }}">
 						<b>{{ log.creator.name | e }}</b></span>#{{ log.creator.discriminator }}
 					{% if log.open %} <span class="mod-tag">Open</span>
 					{% else %} <span class='red-tag'>Closed</span>
@@ -129,23 +132,30 @@
 		</div>
 		<div class="pagination">
 			{% if data.page != 1 %}
-			<a href="?page=1" class="btn waves-effect">
+			<a href="?page=1&open={{ data.status_open }}" class="btn waves-effect">
 				<i class="material-icons">first_page</i>
 			</a>
 			{% endif %}
 			{% if data.page > 1 %}
-			<a href="?page={{ data.page - 1 }}" class="btn waves-effect">
+			<a href="?page={{ data.page - 1 }}&open={{ data.status_open }}" class="btn waves-effect">
 				<i class="material-icons">chevron_left</i>
 			</a>
 			{% endif %}
-			{% if data.page < data.max_page %} <a href="?page={{ data.page + 1 }}" class="btn waves-effect">
+			{% if data.page < data.max_page %}
+			<a href="?page={{ data.page + 1 }}&open={{ data.status_open }}" class="btn waves-effect">
 				<i class="material-icons">chevron_right</i>
-				</a>
-				{% endif %}
-				{% if data.page < data.max_page %} <a href="?page={{ data.max_page }}" class="btn waves-effect">
-					<i class="material-icons">last_page</i>
-					</a>
-					{% endif %}
+			</a>
+			{% endif %}
+			{% if data.page < data.max_page %} <a href="?page={{ data.max_page }}&open={{ data.status_open }}" class="btn waves-effect">
+				<i class="material-icons">last_page</i>
+			</a>
+			{% endif %}
+			<a href="?page={{ data.page }}&open=true" class="btn waves-effect"{% if data.status_open == 'true' %}style="background-color: rgb(64, 69, 75);"{% endif %}>
+				<i class="material-icons">pending</i>&nbsp;Open
+			</a>
+			<a href="?page={{ data.page }}&open=false" class="btn waves-effect" {% if data.status_open == 'false' %}style="background-color: rgb(64, 69, 75);"{% endif %}>
+				<i class="material-icons">done_all</i>&nbsp;Closed
+			</a>
 		</div>
 	</div>
 	<script>

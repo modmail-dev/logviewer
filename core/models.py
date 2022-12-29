@@ -4,7 +4,7 @@ import dateutil.parser
 from sanic import response
 from natural.date import duration
 
-from .formatter import format_content_html
+from core.formatter import format_content_html
 
 
 class LogEntry:
@@ -111,12 +111,13 @@ class LogEntry:
         return response.text(out)
 
 class LogList:
-    def __init__(self, app, data, prefix, page, max_page):
+    def __init__(self, app, data, prefix, page, max_page, status_open):
         self.app = app
         self.logs = data
         self.prefix = prefix
         self.page = page
         self.max_page = max_page
+        self.status_open = status_open
 
     def render_html(self):
         return self.app.ctx.render_template("loglist", data=self)

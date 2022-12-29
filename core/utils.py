@@ -17,15 +17,23 @@ def loglist():
             
             config = await app.ctx.db.config.find_one()
 
+            logs_per_page = 25
+
+            if "PAGINATION" in os.environ:
+                try:
+                    logs_per_page = int(os.environ["PAGINATION"])
+                except ValueError:
+                    print("Invalid PAGINATION config var (must be a number). Defaulting to 25.")
+
             collection = app.ctx.db.logs
 
             try:
                 page = int(request.args.get("page", 1))
                 if page < 1: page = 1
 
-                query = request.args.get("search")
-                
+                status_open = request.args.get("open")
 
+                search = request.args.get("search")
 
             except ValueError:
                 page = 1
@@ -37,17 +45,12 @@ def loglist():
 
             async def find():
 
-                if "PAGINATION" in os.environ:
-                    try:
-                        logs_per_page = int(os.environ["PAGINATION"])
-                    except ValueError:
-                        print("Invalid PAGINATION config var (must be a number). Defaulting to 25.")
-                        logs_per_page = 25
-
                 filter_ = {"bot_id": str(config["bot_id"])}
 
-                if query is not None: filter_["recipient.id"] = query 
-
+                if status_open == "false": filter_["open"] = False
+                if status_open == "true": filter_["open"] = True
+                
+                if search: filter_["$text"] = { "$search": search }
 
                 projection_ = {
                     "key": 1,
@@ -67,7 +70,7 @@ def loglist():
 
                 count = await collection.count_documents(filter=filter_)
 
-                max_page = round(count / logs_per_page)
+                max_page = int(count / logs_per_page)
                 if (count % logs_per_page) > 0: max_page += 1
 
                 items = await cursor.to_list(length=logs_per_page)
@@ -89,7 +92,7 @@ def loglist():
                 return items, max_page
 
             document, max_page = await find()
-            return await func(request, document, page, max_page)
+            return await func(request, document, page, max_page, status_open)
 
         return wrapper
 
