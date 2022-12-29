@@ -3434,7 +3434,7 @@ input[type=range]+.thumb {
 }
 
 .td-npy {
-	padding: 0 5px !important;
+	padding: 0 5px 0 0 !important;
 }
 
 span.badge {
@@ -5542,6 +5542,7 @@ small {
 .btn-flat i {
 	font-size: 1.3rem;
 	line-height: inherit;
+	vertical-align: top;
 }
 
 .btn:focus,
