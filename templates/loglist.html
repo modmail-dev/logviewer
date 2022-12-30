@@ -208,10 +208,69 @@
 			return window.location.href = $(random_thread).attr('href')
 		}
 
+		const params = new Proxy(new URLSearchParams(window.location.search), {
+  			get: (searchParams, prop) => searchParams.get(prop),
+		});
+
+		if (params.search) $(".searchbar").attr('placeholder', params.search);
+
+		let url = `${window.location.pathname}?`
+		let streak_index = 0;
 		function searchThread() {
-			let q = $("#searchbar").val();
-			let url = window.location.pathname
-			return window.location.href = `${url}?search=${q}`
+			const streak = ['Double click!', 'Triple click!', 'Quadruple click!', 'Rampage!!', 'Unstoppable!!!']
+			let q = $(".searchbar").val()
+			if (q) { url += `&search=${q}` }
+			else {
+				$('.searchbar').attr('placeholder', streak[streak_index]);
+				return streak_index++
+			}
+			if (params.page) url += `&page=${params.page}`;
+			if (params.open) url += `&open=${params.open}`;
+			return window.location.href = url
+		}
+
+		function nextPage() {
+			if (params.search) url += `&search=${params.search}`
+			if (params.page) url += `&page=${params.page + 1}`
+			else url += `&page=2`
+			if (params.open) url += `&open=${params.open}`
+			return window.location.href = url
+		}
+
+		function previousPage() {
+			if (params.search) url += `&search=${params.search}`
+			if (params.page) url += `&page=${params.page - 1}`
+			if (params.open) url += `&open=${params.open}`
+			return window.location.href = url
+		}
+
+		function firstPage() {
+			if (params.search) url += `&search=${params.search}`
+			url += `&page=1`
+			if (params.open) url += `&open=${params.open}`
+			return window.location.href = url
+		}
+
+		const last_page = {{ data.max_page | safe }}
+		function lastPage() {
+			if (params.search) url += `&search=${params.search}`
+			url += `&page=${last_page}`
+			if (params.open) url += `&open=${params.open}`
+			return window.location.href = url
+		}
+
+		function filterOpen(toggle) {
+			if (params.search) url += `&search=${params.search}`
+			if (params.page) url += `&page=${params.page}`
+			if (toggle == 'on') url += `&open=true`
+			return window.location.href = url
+		}
+
+		function filterClosed(toggle) {
+			if (params.search) url += `&search=${params.search}`
+			if (params.page) url += `&page=${params.page}`
+			if (toggle == 'on') url += `&open=false`
+			return window.location.href = url
 		}
 
 	</script>
