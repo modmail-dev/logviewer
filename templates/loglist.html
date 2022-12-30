@@ -231,7 +231,7 @@
 
 		function nextPage() {
 			if (params.search) url += `&search=${params.search}`
-			if (params.page) url += `&page=${params.page + 1}`
+			if (params.page) url += `&page=${Number(params.page ) + 1}`
 			else url += `&page=2`
 			if (params.open) url += `&open=${params.open}`
 			return window.location.href = url
@@ -239,7 +239,7 @@
 
 		function previousPage() {
 			if (params.search) url += `&search=${params.search}`
-			if (params.page) url += `&page=${params.page - 1}`
+			if (params.page) url += `&page=${Number(params.page ) - 1}`
 			if (params.open) url += `&open=${params.open}`
 			return window.location.href = url
 		}
