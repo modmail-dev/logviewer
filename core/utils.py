@@ -65,7 +65,8 @@ def loglist():
                     "creator": 1,
                     "title": 1,
                     "last_message": { "$arrayElemAt": [ "$messages", -1 ] },
-                    "message_count": { "$size": "$messages" }
+                    "message_count": { "$size": "$messages" },
+                    "nsfw": 1
                 }
 
                 cursor = collection.find(filter=filter_, projection=projection_, skip=(page-1)*logs_per_page).sort(
