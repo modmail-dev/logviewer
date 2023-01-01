@@ -75,7 +75,7 @@ def loglist():
 
                 count = await collection.count_documents(filter=filter_)
 
-                max_page = int(count / logs_per_page)
+                max_page = count // logs_per_page
                 if (count % logs_per_page) > 0: max_page += 1
 
                 items = await cursor.to_list(length=logs_per_page)
