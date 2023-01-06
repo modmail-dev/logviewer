@@ -1,8 +1,6 @@
 name: Logviewer Workflow
 
-on:
-  push:
-    branches: ['master']
+on: [push, pull_request]
 
 jobs:
   code-style:
