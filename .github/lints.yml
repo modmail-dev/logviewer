@@ -1,6 +1,8 @@
-name: Modmail Workflow
+name: Logviewer Workflow
 
-on: [push, pull_request]
+on:
+  push:
+    branches: ['master']
 
 jobs:
   code-style:
