@@ -2,7 +2,7 @@ FROM python:3.10-alpine as py
 
 FROM py as build
 
-RUN apk update && apk add g++ git
+RUN apk update && apk add g++
 COPY requirements.txt /
 RUN pip install --prefix=/inst -U -r /requirements.txt
 
