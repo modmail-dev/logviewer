@@ -1,4 +1,4 @@
-FROM python:3.10-alpine as py
+FROM python:3.10-slim as py
 
 FROM py as build
 
