@@ -1,4 +1,4 @@
-FROM python:3.9-slim as py
+FROM python:3.10-alpine as py
 
 FROM py as build
 
@@ -14,4 +14,3 @@ COPY --from=build /inst /usr/local
 WORKDIR /logviewer
 CMD ["python", "app.py"]
 COPY . /logviewer
-
