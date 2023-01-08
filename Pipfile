@@ -4,6 +4,10 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+bandit = "~=1.7.0"
+black = "==22.3.0"
+pylint = "~=2.9.3"
+typing-extensions = "==4.2.0"
 
 [packages]
 jinja2 = "~=3.1.2"
@@ -11,10 +15,8 @@ motor = "~=3.0"
 natural = "~=0.2.0"
 pymongo = {version = "*", extras = ['srv']}  # Required by motor
 python-dateutil = "~=2.8.2"
+python-dotenv = "~=0.18.0"
 sanic = "~=22.6.0"
 
 [scripts]
 logviewer = "python app.py"
-
-[requires]
-python_version = "3.9"
