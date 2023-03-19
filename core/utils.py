@@ -89,9 +89,14 @@ def loglist():
                     if close_date is not None:
                         items[index].update(closed_at=parse_date(close_date))
 
-                    last_message = items[index].get('last_message')
-                    last_message_duration = parse_date(last_message.get('timestamp'))
-                    items[index]['last_message_time'] = last_message_duration
+                    try:
+                        last_message = items[index].get("last_message")
+                        last_message_duration = parse_date(
+                            last_message.get("timestamp")
+                        )
+                        items[index]["last_message_time"] = last_message_duration
+                    except Exception:
+                        pass
 
                 return items, max_page, status_open, count_all
 

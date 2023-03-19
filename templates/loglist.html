@@ -96,10 +96,12 @@
 									total message{% if log.message_count > 1 %}s{% endif %}
 								</td>
 							</tr>
+							{% if log.last_message_time %}
 							<tr class="tr-nbb">
 								<td class="td-npy chatlog__timestamp">Last Message:</td>
 								<td class="td-npy chatlog__timestamp">{{ log.last_message_time }}</td>
 							</tr>
+							{% endif %}
 						</table>
 					</div>
 				</div>
