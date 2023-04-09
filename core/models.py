@@ -1,10 +1,10 @@
-from datetime import datetime
+from datetime import datetime, timezone
 import dateutil.parser
 
 from sanic import response
 from natural.date import duration
 
-from .formatter import format_content_html
+from core.formatter import format_content_html
 
 
 class LogEntry:
@@ -12,10 +12,10 @@ class LogEntry:
         self.app = app
         self.key = data["key"]
         self.open = data["open"]
-        self.created_at = dateutil.parser.parse(data["created_at"])
-        self.human_created_at = duration(self.created_at, now=datetime.utcnow())
+        self.created_at = dateutil.parser.parse(data["created_at"]).astimezone(timezone.utc)
+        self.human_created_at = duration(self.created_at, now=datetime.now(timezone.utc))
         self.closed_at = (
-            dateutil.parser.parse(data["closed_at"]) if not self.open else None
+            dateutil.parser.parse(data["closed_at"]).astimezone(timezone.utc) if not self.open else None
         )
         self.channel_id = int(data["channel_id"])
         self.guild_id = int(data["guild_id"])
@@ -31,11 +31,11 @@ class LogEntry:
 
     @property
     def system_avatar_url(self):
-        return "https://discordapp.com/assets/" "f78426a064bc9dd24847519259bc42af.png"
+        return "/static/img/avatar_self.png"
 
     @property
     def human_closed_at(self):
-        return duration(self.closed_at, now=datetime.utcnow())
+        return duration(self.closed_at, now=datetime.now(timezone.utc))
 
     @property
     def message_groups(self):
@@ -110,6 +110,19 @@ class LogEntry:
 
         return response.text(out)
 
+class LogList:
+    def __init__(self, app, data, prefix, page, max_page, status_open, count_all):
+        self.app = app
+        self.logs = data
+        self.prefix = prefix
+        self.page = page
+        self.max_page = max_page
+        self.status_open = status_open
+        self.count_all = count_all
+
+    def render_html(self):
+        return self.app.ctx.render_template("loglist", data=self)
+
 
 class User:
     def __init__(self, data):
@@ -165,8 +178,8 @@ class Attachment:
 class Message:
     def __init__(self, data):
         self.id = int(data["message_id"])
-        self.created_at = dateutil.parser.parse(data["timestamp"])
-        self.human_created_at = duration(self.created_at, now=datetime.utcnow())
+        self.created_at = dateutil.parser.parse(data["timestamp"]).astimezone(timezone.utc)
+        self.human_created_at = duration(self.created_at, now=datetime.now(timezone.utc))
         self.raw_content = data["content"]
         self.content = self.format_html_content(self.raw_content)
         self.attachments = [Attachment(a) for a in data["attachments"]]

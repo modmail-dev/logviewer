@@ -2,13 +2,16 @@ __version__ = "1.1.1"
 
 import os
 
+from dotenv import load_dotenv
 from motor.motor_asyncio import AsyncIOMotorClient
 from sanic import Sanic, response
 from sanic.exceptions import NotFound
 from jinja2 import Environment, FileSystemLoader
 
-from core.models import LogEntry
+from core.models import LogEntry, LogList
+from core.utils import loglist
 
+load_dotenv()
 
 if "URL_PREFIX" in os.environ:
     print("Using the legacy config var `URL_PREFIX`, rename it to `LOG_URL_PREFIX`")
@@ -19,9 +22,11 @@ else:
 if prefix == "NONE":
     prefix = ""
 
-MONGO_URI = os.getenv("MONGO_URI")
+MONGO_URI = os.getenv("MONGO_URI") or os.getenv("CONNECTION_URI")
 if not MONGO_URI:
-    MONGO_URI = os.environ['CONNECTION_URI']
+    print("No CONNECTION_URI config var found. "
+          "Please enter your MongoDB connection URI in the configuration or .env file.")
+    exit(1)
 
 app = Sanic(__name__)
 app.static("/static", "./static")
@@ -49,7 +54,20 @@ async def not_found(request, exc):
 
 @app.get("/")
 async def index(request):
-    return render_template("index")
+    return render_template("index", prefix=prefix)
+
+
+@app.get(prefix)
+@loglist()
+async def get_log_list(request, document, page, max_page, status_open, count_all):
+    """Returns the html rendered log list"""
+
+    if document is None:
+        raise NotFound
+
+    log_list = LogList(app, document, prefix, page, max_page, status_open, count_all)
+
+    return log_list.render_html()
 
 
 @app.get(prefix + "/raw/<key>")

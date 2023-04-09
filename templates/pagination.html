@@ -1,0 +1,44 @@
+<div class="pagination">
+	{% if data.page != 1 %}
+	<a class="btn waves-effect" onclick="firstPage()">
+		<i class="material-icons">first_page</i>
+	</a>
+	{% endif %}
+	{% if data.page > 1 %}
+	<a class="btn waves-effect" onclick="previousPage()">
+		<i class="material-icons">chevron_left</i>
+	</a>
+	{% endif %}
+	{% if data.page < data.max_page %}
+	<a class="btn waves-effect" onclick="nextPage()">
+		<i class="material-icons">chevron_right</i>
+	</a>
+	{% endif %}
+	{% if data.page < data.max_page %}
+	<a class="btn waves-effect" onclick="lastPage()">
+		<i class="material-icons">last_page</i>
+	</a>
+	{% endif %}
+	<a class="btn waves-effect openfilter"
+		{% if data.status_open == 'true' %}
+		onclick="filterOpen('off')"
+		style="background-color: rgb(64, 69, 75);"
+		{% else %}
+		onclick="filterOpen('on')"
+		{% endif %}>
+		<i class="material-icons">sms</i>&nbsp;Open
+	</a>
+	<a class="btn waves-effect closefilter"
+		{% if data.status_open == 'false' %}
+		onclick="filterClosed('off')"
+		style="background-color: rgb(64, 69, 75);"
+		{% else %}
+		onclick="filterClosed('on')"
+		{% endif %}>
+		<i class="material-icons">done_all</i>&nbsp;Closed
+	</a>
+	<input class="input-field searchbar" type="text" placeholder="Search" name="search" onkeypress="KeyPress(event)">
+	<a href="#" class="btn waves-effect" onclick="searchThread()">
+		<i class="material-icons">search</i>
+	</a>
+</div>

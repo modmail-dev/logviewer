@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Log Entry</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width" />
+
+	<link href="/static/css/logstyle.css" rel="stylesheet">
+	<link href="/static/css/solarized-dark.css" rel="stylesheet">
+	<link rel="shortcut icon" href="/static/favicon.ico">
+
+	<link rel="stylesheet" href="/static/css/solarized-dark.css">
+	<script src="/static/js/highlight.pack.js"></script>
+	<script src="/static/js/jquery-3.3.1.min.js"></script>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="/static/css/materialize.css" media="screen,projection">
+	<link href="/static/css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+	<link href="/static/css/animate.min.css" type="text/css" rel="stylesheet" media="screen,projection" />
+	<link href="https://fonts.googleapis.com/css?family=Bowlby+One+SC" rel="stylesheet">
+</head>
+
+<body>
+	{% block navbar %}
+
+	{% include 'navbar.html' %}
+
+	{% endblock %}
+
+	<div class='entry'>
+		<br>
+		<div class="info">
+			<div class="info__guild-icon-container">
+				<img class="info__guild-icon hoverable" src="/static/img/avatar_modmail.png" alt="avatar">
+			</div>
+			<div class="info__metadata">
+				<div class="info__guild-name">Modmail <span style='color:white'>Logviewer.</span>
+				</div>
+				<div class="info__channel-topic tooltip">Displaying
+					<span style="color:white"><b>{{ data.logs | length }}</b> out of <b>{{ data.count_all }}</b> threads</span> in
+					<span style="color:white">page <b>{{ data.page }}</b></span>
+					sorted by latest creation date first.
+				</div>
+				<div class="info__channel-message-count">
+					<a style="color: gray;" href="{{ data.prefix }}">🧵 View all threads</a> ;
+					{% if data.logs %}
+					<a style="color: gray;" href="javascript:selectRandomThread()">🎲 View random thread in page</a>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+
+		{% include 'pagination.html' %}
+		
+		<div class="chatlog">
+			{% for log in data.logs %}
+			<div class="chatlog__message-group active_hover" onclick="hoverIt(this)">
+				<div class="chatlog__author-avatar-container">
+					<img class="chatlog__author-avatar" src="{{ log.creator.avatar_url }}"
+						onerror="this.src='/static/img/avatar_default.png'" alt="avatar" />
+				</div>
+				<div class="chatlog__messages">
+					<span class="chatlog__author-name" title="{{ log.creator.id }}">
+						<b>{{ log.creator.name | e }}</b></span>#{{ log.creator.discriminator }}
+					{% if log.open %} <span class="mod-tag">Open</span>
+					{% else %} <span class='red-tag'>Closed</span>
+					{% endif %}
+					{% if log.nsfw %} <span class="internal-tag">NSFW</span>
+					{% endif %}
+					<span class="chatlog__timestamp">
+						{% if log.open %} Opened {{ log.created_at }}
+						{% else %} Closed {{ log.closed_at }}
+						{% endif %}
+					</span>
+					<div class="chatlog__content" id="{{ log.key }}">
+						<table class="auto-width">
+							<tr class="tr-nbb">
+								<td class="td-npy">Thread ID:</td>
+								<td class="td-npy">
+									<a class='log-button thread-href' href="{{ data.prefix }}/{{ log.key }}">{{ log.key }}</a>
+								</td>
+							</tr>
+							<tr class="tr-nbb">
+								<td class="td-npy">Recipient:</td>
+								<td class="td-npy">
+									<div title="{{ log.recipient.id }}" class="info__channel-topic tooltip">
+										<span style="color:white">{{ log.recipient.name | e }}</span>#{{ log.recipient.discriminator }}
+										<span class="tooltiptext pre pre--inline">{{ log.recipient.id }}</span>
+									</div>
+								</td>
+							</tr>
+							<tr class="tr-nbb">
+								<td class="td-npy">Content:</td>
+								<td class="td-npy">
+									<span class='tooltiptext pre pre--inline'> {{ log.message_count }} </span>
+									total message{% if log.message_count > 1 %}s{% endif %}
+								</td>
+							</tr>
+							{% if log.last_message_time %}
+							<tr class="tr-nbb">
+								<td class="td-npy chatlog__timestamp">Last Message:</td>
+								<td class="td-npy chatlog__timestamp">{{ log.last_message_time }}</td>
+							</tr>
+							{% endif %}
+						</table>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+
+			{% if not data.logs %}
+			<div class="chatlog__message-group active_hover" onclick="hoverIt(this)">
+				<div class="chatlog__author-avatar-container">
+					<img class="chatlog__author-avatar" src="/static/img/mei.png" />
+				</div>
+				<div class="chatlog__messages">
+					<span class="chatlog__author-name">
+						<b>Mei</b></span>#Raiden
+					<span class="internal-tag">404</span>
+					<span class="chatlog__timestamp">
+						Herrscher of Thunder
+					</span>
+					<div class="chatlog__content" id="nothing">
+						You found Mei here but nothing else with that search term.
+					</div>
+				</div>
+			</div>
+			{% endif %}
+
+		</div>
+
+		{% include 'pagination.html' %}
+
+	</div>
+	<script>
+
+		function hoverIt(elem) {
+			for (let child of elem.children[1].children) {
+				if (child.classList.contains('chatlog__content') || child.classList.contains('chatlog__attachment')) {
+					let should_add = false
+					if (!elem.classList.contains('perma_hover')) {
+						should_add = true
+					}
+					removePermaHover()
+					if (should_add) {
+						history.pushState(null, null, '#' + child.id);
+						elem.classList.add('perma_hover')
+					}
+					return
+				}
+			}
+		}
+
+		function highlightMessage() {
+			let message_id = document.location.hash.split('#')[1]
+			if (message_id) {
+				msg = document.getElementById(message_id)
+				if (msg) {
+					let group = msg.parentElement.parentElement
+					group.classList.add('perma_hover')
+					return group
+				}
+			}
+		}
+
+		function removePermaHover(elem) {
+			for (let elem of document.getElementsByClassName('perma_hover')) {
+				elem.classList.remove('perma_hover')
+			}
+			history.pushState(null, null, window.location.href.split('#')[0])
+		}
+
+		window.onhashchange = highlightMessage;
+
+		function scrollToElement(pageElement) {
+			let y = pageElement.getBoundingClientRect().top + window.scrollY - 70
+			window.scroll({
+				top: y,
+				behavior: 'smooth'
+			});
+		}
+
+
+		let messages = document.getElementsByClassName('internal')
+
+		for (let m of messages) {
+			m.style.display = "none";
+		}
+
+
+		let initial_group = highlightMessage()
+		if (initial_group) {
+
+			if (initial_group.classList.contains('internal')) {
+				toggle = document.getElementById('internal_toggle')
+				toggle.click()
+			}
+			scrollToElement(initial_group)
+		}
+
+		$(document).ready(function () {
+			$('.pre--multiline').each(function (i, block) {
+				hljs.highlightBlock(block);
+			});
+		});
+
+		function selectRandomThread() {
+			let threads_arr = document.getElementsByClassName('thread-href')
+			let random_thread = threads_arr[Math.floor(Math.random() * threads_arr.length)];
+			return window.location.href = $(random_thread).attr('href')
+		}
+
+		const params = new Proxy(new URLSearchParams(window.location.search), {
+  			get: (searchParams, prop) => searchParams.get(prop),
+		});
+
+		if (params.search) $(".searchbar").attr('placeholder', params.search);
+
+		let url = `${window.location.pathname}?`
+		let streak_index = 0;
+		function searchThread() {
+			const streak = ['Double click!', 'Triple click!', 'Quadruple click!', 'Rampage!!', 'Unstoppable!!!']
+			let q = $(".searchbar").val()
+			if (q) { url += `&search=${q}` }
+			else {
+				$('.searchbar').attr('placeholder', streak[streak_index]);
+				return streak_index++
+			}
+			if (params.page) url += `&page=${params.page}`;
+			if (params.open) url += `&open=${params.open}`;
+			return window.location.href = url
+		}
+
+		function nextPage() {
+			if (params.search) url += `&search=${params.search}`
+			if (params.page) url += `&page=${Number(params.page ) + 1}`
+			else url += `&page=2`
+			if (params.open) url += `&open=${params.open}`
+			return window.location.href = url
+		}
+
+		function previousPage() {
+			if (params.search) url += `&search=${params.search}`
+			if (params.page) url += `&page=${Number(params.page ) - 1}`
+			if (params.open) url += `&open=${params.open}`
+			return window.location.href = url
+		}
+
+		function firstPage() {
+			if (params.search) url += `&search=${params.search}`
+			url += `&page=1`
+			if (params.open) url += `&open=${params.open}`
+			return window.location.href = url
+		}
+
+		const last_page = {{ data.max_page | safe }}
+		function lastPage() {
+			if (params.search) url += `&search=${params.search}`
+			url += `&page=${last_page}`
+			if (params.open) url += `&open=${params.open}`
+			return window.location.href = url
+		}
+
+		function filterOpen(toggle) {
+			if (params.search) url += `&search=${params.search}`
+			if (params.page) url += `&page=${params.page}`
+			if (toggle == 'on') url += `&open=true`
+			return window.location.href = url
+		}
+
+		function filterClosed(toggle) {
+			if (params.search) url += `&search=${params.search}`
+			if (params.page) url += `&page=${params.page}`
+			if (toggle == 'on') url += `&open=false`
+			return window.location.href = url
+		}
+
+		function KeyPress(event) {
+			if (event.key == "Enter") searchThread();
+		}
+
+	</script>
+
+	<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script>
+		M.AutoInit();
+		$('.dropdown-trigger').dropdown({ coverTrigger: false });
+	</script>
+</body>
+
+</html>
