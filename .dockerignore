@@ -105,9 +105,12 @@ venv.bak/
 
 # Other stuff
 .env.example
+.dockerignore
 .gitignore
 .github/
 app.json
+Dockerfile
+LICENSE
 Procfile
 README.md
 Pipfile
