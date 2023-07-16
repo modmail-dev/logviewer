@@ -3,7 +3,7 @@
     <strong><i>A simple webserver to view your selfhosted modmail logs.</i></strong>
     <br />
     <br />
-    <a href="https://heroku.com/deploy?template=https://github.com/kyb3r/logviewer">
+    <a href="https://heroku.com/deploy?template=https://github.com/modmail-dev/logviewer">
       <img src="https://img.shields.io/badge/deploy_to-heroku-997FBC.svg?style=for-the-badge" alt="Deploy to Heroku"/>
     </a>
     <a href="https://discord.gg/etJNHCQ">
@@ -18,7 +18,7 @@
     <a href="https://github.com/psf/black">
       <img src="https://img.shields.io/badge/Code%20Style-Black-black?style=for-the-badge" alt="Coding Style Black">
     </a>
-    <a href="https://github.com/kyb3r/logviewer/blob/master/LICENSE">
+    <a href="https://github.com/modmail-dev/logviewer/blob/master/LICENSE">
       <img src="https://img.shields.io/badge/license-agpl-e74c3c.svg?style=for-the-badge" alt="AGPL License">
     </a>
 </div>
@@ -54,7 +54,7 @@ sudo apt install software-properties-common python3.9 python3-dev python3-pip
 
 Run the following shell commands:
 ```shell
-git clone https://github.com/kyb3r/logviewer
+git clone https://github.com/modmail-dev/logviewer
 cd logviewer
 python3 -m pip install pipenv
 pipenv install
