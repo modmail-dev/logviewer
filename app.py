@@ -29,7 +29,6 @@ if not MONGO_URI:
 
 app = Sanic(__name__)
 app.static("/static", "./static")
-app.static("/img", "./img")
 
 jinja_env = Environment(loader=FileSystemLoader("templates"))
 
