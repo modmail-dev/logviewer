@@ -19,11 +19,11 @@ class LogEntry:
         )
         self.channel_id = int(data["channel_id"])
         self.guild_id = int(data["guild_id"])
-        self.creator = User(data["creator"])
-        self.recipient = User(data["recipient"])
-        self.closer = User(data["closer"]) if not self.open else None
+        self.creator = User(app, data["creator"])
+        self.recipient = User(app, data["recipient"])
+        self.closer = User(app, data["closer"]) if not self.open else None
         self.close_message = format_content_html(data.get("close_message") or "")
-        self.messages = [Message(m) for m in data["messages"]]
+        self.messages = [Message(app, m) for m in data["messages"]]
         self.internal_messages = [m for m in self.messages if m.type == "internal"]
         self.thread_messages = [
             m for m in self.messages if m.type not in ("internal", "system")
@@ -112,7 +112,8 @@ class LogEntry:
 
 
 class User:
-    def __init__(self, data):
+    def __init__(self, app, data):
+        self.app = app
         self.id = int(data.get("id"))
         self.name = data["name"]
         self.discriminator = data["discriminator"]
@@ -147,7 +148,8 @@ class MessageGroup:
 
 
 class Attachment:
-    def __init__(self, data):
+    def __init__(self, app, data):
+        self.app = app
         if isinstance(data, str):  # Backwards compatibility
             self.id = 0
             self.filename = "attachment"
@@ -160,17 +162,22 @@ class Attachment:
             self.url = data["url"]
             self.is_image = data["is_image"]
             self.size = data["size"]
+        if self.app.ctx.attachment_proxy_url is not None:
+            self.url = self.url.replace("https://cdn.discordapp.com", self.app.ctx.attachment_proxy_url)
+            self.url = self.url.replace("https://media.discordapp.net", self.app.ctx.attachment_proxy_url)
+            print(self.url)
 
 
 class Message:
-    def __init__(self, data):
+    def __init__(self, app, data):
+        self.app = app
         self.id = int(data["message_id"])
         self.created_at = dateutil.parser.parse(data["timestamp"]).astimezone(timezone.utc)
         self.human_created_at = duration(self.created_at, now=datetime.now(timezone.utc))
         self.raw_content = data["content"]
         self.content = self.format_html_content(self.raw_content)
-        self.attachments = [Attachment(a) for a in data["attachments"]]
-        self.author = User(data["author"])
+        self.attachments = [Attachment(app, a) for a in data["attachments"]]
+        self.author = User(app, data["author"])
         self.type = data.get("type", "thread_message")
         self.edited = data.get("edited", False)
 

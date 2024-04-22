@@ -1,11 +1,21 @@
 {
-  "name": "Modmail Log Viewer",
-  "description": "A simple webserver to view self-hosted logs",
-  "repository": "https://github.com/kyb3r/logviewer",
-  "env": {
-    "MONGO_URI": {
-        "description": "MongoDB connection URI that contains your modmail logs.",
-        "required": true
+    "name": "Modmail Log Viewer",
+    "description": "A simple webserver to view self-hosted logs",
+    "repository": "https://github.com/kyb3r/logviewer",
+    "env": {
+        "MONGO_URI": {
+            "description": "MongoDB connection URI that contains your modmail logs.",
+            "required": true
         }
+    },
+    "USE_ATTACHMENT_PROXY": {
+        "description": "Whether if the logviewer should use a proxy to view attachments. If set to 'no', attachments will expire after 1 day. USE AT YOUR OWN RISK.",
+        "required": false,
+        "value": "no"
+    },
+    "ATTACHMENT_PROXY_URL": {
+        "description": "Proxy URL for viewing attachments.",
+        "required": false,
+        "value": "https://cdn.discordapp.xyz"
     }
 }

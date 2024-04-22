@@ -1,5 +1,6 @@
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 
+import html
 import os
 
 from dotenv import load_dotenv
@@ -41,10 +42,34 @@ def render_template(name, *args, **kwargs):
 app.ctx.render_template = render_template
 
 
+def strtobool(val):
+    """
+    Copied from distutils.strtobool.
+
+    Convert a string representation of truth to true (1) or false (0).
+
+    True values are 'y', 'yes', 't', 'true', 'on', and '1'; false values
+    are 'n', 'no', 'f', 'false', 'off', and '0'.  Raises ValueError if
+    'val' is anything else.
+    """
+    val = val.lower()
+    if val in ('y', 'yes', 't', 'true', 'on', '1'):
+        return 1
+    elif val in ('n', 'no', 'f', 'false', 'off', '0'):
+        return 0
+    else:
+        raise ValueError("invalid truth value %r" % (val,))
+
+
 @app.listener("before_server_start")
 async def init(app, loop):
     app.ctx.db = AsyncIOMotorClient(MONGO_URI).modmail_bot
-
+    use_attachment_proxy = strtobool(os.getenv("USE_ATTACHMENT_PROXY", "https://cdn.discordapp.xyz"))
+    if use_attachment_proxy:
+        app.ctx.attachment_proxy_url = os.environ["ATTACHMENT_PROXY_URL"]
+        app.ctx.attachment_proxy_url = html.escape(app.ctx.attachment_proxy_url).rstrip("/")
+    else:
+        app.ctx.attachment_proxy_url = None
 
 @app.exception(NotFound)
 async def not_found(request, exc):
