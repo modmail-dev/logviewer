@@ -41,7 +41,7 @@
         <div class="info__guild-icon-container">
             <img class="info__guild-icon hoverable"
                  src="{{ log_entry.recipient.avatar_url }}"
-                 onerror="this.src='{{ log_entry.recipient.default_avatar_url }}'"
+                 onerror="this.onerror=null;this.src='{{ log_entry.recipient.default_avatar_url }}'"
                  alt="avatar">
         </div>
         <div class="info__metadata">
@@ -81,7 +81,7 @@
                 <div class="chatlog__author-avatar-container">
                         <img class="chatlog__author-avatar"
                              src="{{ group.author.avatar_url }}"
-                             onerror="this.src='{{ group.author.default_avatar_url }}'"
+                             onerror="this.onerror=null;this.src='{{ group.author.default_avatar_url }}'"
                              alt="avatar"/>
                 </div>
 
