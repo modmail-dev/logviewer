@@ -1,0 +1,20 @@
+<!doctype html>
+<!-- Dark theme by default -->
+<html lang="en" class="dark">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		%sveltekit.head%
+		<script>
+			// Set the theme based on the user's preference, or dark theme by default
+			const theme = localStorage.getItem('theme');
+			if (theme === 'dark' || !theme) document.documentElement.classList.add('dark');
+			else document.documentElement.classList.remove('dark');
+		</script>
+	</head>
+	<body data-sveltekit-preload-data="hover" style="background-color: var(--background-secondary)">
+		<div style="display: contents">%sveltekit.body%</div>
+	</body>
+</html>

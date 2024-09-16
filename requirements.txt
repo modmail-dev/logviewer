@@ -1,0 +1,5 @@
+fastapi==0.114.2
+uvicorn==0.30.6
+motor==3.5.1
+beanie==1.26.0
+pydantic-settings==2.5.2

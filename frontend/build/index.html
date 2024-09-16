@@ -1,0 +1,55 @@
+<!doctype html>
+<!-- Dark theme by default -->
+<html lang="en" class="dark">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" href="./favicon.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		
+		<link href="./_app/immutable/assets/0.YTJNZF7r.css" rel="stylesheet">
+		<link rel="modulepreload" href="./_app/immutable/entry/start.BmR4cg7N.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/entry.CgXphtNJ.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/scheduler.D6SdNXE8.js">
+		<link rel="modulepreload" href="./_app/immutable/entry/app.Cf4Bzrn_.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/index.CzAgGwhY.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/0.C_RK_iha.js">
+		<link rel="modulepreload" href="./_app/immutable/chunks/each.CCekh_o_.js">
+		<link rel="modulepreload" href="./_app/immutable/nodes/2.DiDgJ4II.js">
+		<script>
+			// Set the theme based on the user's preference, or dark theme by default
+			const theme = localStorage.getItem('theme');
+			if (theme === 'dark' || !theme) document.documentElement.classList.add('dark');
+			else document.documentElement.classList.remove('dark');
+		</script>
+	</head>
+	<body data-sveltekit-preload-data="hover" style="background-color: var(--background-secondary)">
+		<div style="display: contents">  <div class="flex flex-col min-h-screen bg-primary"> <header class="bg-secondary text-nav p-4 shadow-md"><div class="container mx-auto flex justify-between items-center"> <div class="flex items-center space-x-4"><a href="/" class="text-nav-interactive text-xl font-bold">Logviewer</a> <nav><a href="/logs" class="text-nav-interactive hover:text-nav-interactive-hover active:text-nav-interactive-active ml-3" data-svelte-h="svelte-zvflyk">Logs</a></nav></div>  <div class="flex items-center space-x-3"> <div class="flex items-center bg-search text-normal rounded"><input type="text" placeholder="Search..." class="bg-search text-normal px-2 py-2 focus:outline-none" value=""> <button class="px-3 py-2" data-svelte-h="svelte-66hm6y"> <svg class="h-5 w-5" aria-label="Search" aria-hidden="false" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M15.62 17.03a9 9 0 1 1 1.41-1.41l4.68 4.67a1 1 0 0 1-1.42 1.42l-4.67-4.68ZM17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" clip-rule="evenodd" class=""></path></svg></button></div></div></div></header>  <main class="flex-grow flex flex-col justify-center items-center py-12" data-svelte-h="svelte-10a2lt"><div class="text-center max-w-xl px-4"><h1 class="text-4xl md:text-5xl font-bold mb-4 text-header-primary">Welcome to Logviewer</h1> <p class="text-lg md:text-xl mb-6 text-header-secondary">Easily browse and search through all your Modmail logs in one place. Whether you&#39;re looking
+			for specific conversations or just exploring, we&#39;ve got you covered.</p>  <div class="flex items-center justify-center bg-search text-normal mb-6 rounded shadow-md"><input type="text" placeholder="Search Modmail logs..." class="w-full max-w-md bg-search text-normal px-4 py-3 focus:outline-none"> <button class="pl-4 pr-2 py-3"> <svg class="h-5 w-5" aria-label="Search" aria-hidden="false" role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path fill="currentColor" fill-rule="evenodd" d="M15.62 17.03a9 9 0 1 1 1.41-1.41l4.68 4.67a1 1 0 0 1-1.42 1.42l-4.67-4.68ZM17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" clip-rule="evenodd" class=""></path></svg></button></div> <div class="flex justify-center space-x-4"><a href="/logs" class="bg-button hover:bg-button-hover active:bg-button-active text-button px-4 py-2 rounded-md shadow-md">Browse All Logs</a>  <a href="/logs/view" class="bg-button hover:bg-button-hover active:bg-button-active text-button px-4 py-2 rounded-md shadow-md">Most Recent</a></div></div></main> <footer class="bg-secondary text-nav py-6 mt-auto"><div class="container mx-auto flex flex-col md:flex-row justify-between items-center"> <div class="text-center md:text-left mb-4 md:mb-0"><p class="text-sm">© 2024 Modmail. All rights reserved.</p></div>  <div class="flex space-x-4"><a href="https://patreon.com/kyber" class="text-nav-interactive hover:text-nav-interactive-hover active:text-nav-interactive-active">Donate </a><a href="https://discord.gg/cnUpwrnpYb" class="text-nav-interactive hover:text-nav-interactive-hover active:text-nav-interactive-active">Discord </a><a href="#" class="text-nav-interactive hover:text-nav-interactive-hover active:text-nav-interactive-active">Privacy Policy </a></div></div></footer></div> 
+			
+			<script>
+				{
+					__sveltekit_3de34i = {
+						base: new URL(".", location).pathname.slice(0, -1)
+					};
+
+					const element = document.currentScript.parentElement;
+
+					const data = [null,null];
+
+					Promise.all([
+						import("./_app/immutable/entry/start.BmR4cg7N.js"),
+						import("./_app/immutable/entry/app.Cf4Bzrn_.js")
+					]).then(([kit, app]) => {
+						kit.start(app, element, {
+							node_ids: [0, 2],
+							data,
+							form: null,
+							error: null
+						});
+					});
+				}
+			</script>
+		</div>
+	</body>
+</html>
