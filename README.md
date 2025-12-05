@@ -41,7 +41,7 @@ Below are some general instructions to help you get started on a Linux machine.
 
 ### Prerequisites
 
-- A [Python 3.9 installation](https://www.python.org/downloads/) with `pip`
+- A [Python 3.11 installation](https://www.python.org/downloads/) with `pip`
 - `git` for your system
 
 e.g. on Ubuntu: 
@@ -81,7 +81,7 @@ To accept requests from a domain instead of your server IP, simply set an `A`/`A
 
 ## Discord OAuth2 
 
-Protecting your logs with a login (Discord Oauth2 support) is a premium feature, only available to [Patrons](https://patreon.com/kyber).
+Protecting your logs with a login (Discord Oauth2 support) is a premium feature, only available to [Premium members](https://buymeacoffee.com/modmaildev).
 
 ## Contributing
 
