@@ -54,7 +54,7 @@ sudo apt install software-properties-common python3.9 python3-dev python3-pip
 
 Run the following shell commands:
 ```shell
-git clone https://github.com/kyb3r/logviewer
+git clone https://github.com/modmail-dev/logviewer
 cd logviewer
 python3 -m pip install pipenv
 pipenv install
