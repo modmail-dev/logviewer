@@ -8,7 +8,7 @@ def format_content_html(content: str, allow_links: bool = False) -> str:
 
     def encode_codeblock(m):
         encoded = base64.b64encode(m.group(1).encode()).decode()
-        return "\x1AM" + encoded + "\x1AM"
+        return "\x1aM" + encoded + "\x1aM"
 
     # Encode multiline codeblocks (```text```)
     content = re.sub(r"```+((?:[^`]*?\n)?(?:[^`]+))\n?```+", encode_codeblock, content)
@@ -17,7 +17,7 @@ def format_content_html(content: str, allow_links: bool = False) -> str:
 
     def encode_inline_codeblock(m):
         encoded = base64.b64encode(m.group(1).encode()).decode()
-        return "\x1AI" + encoded + "\x1AI"
+        return "\x1aI" + encoded + "\x1aI"
 
     # Encode inline codeblocks (`text`)
     content = re.sub(r"`([^`]+)`", encode_inline_codeblock, content)
@@ -28,13 +28,13 @@ def format_content_html(content: str, allow_links: bool = False) -> str:
         def encode_link(m):
             encoded_1 = base64.b64encode(m.group(1).encode()).decode()
             encoded_2 = base64.b64encode(m.group(2).encode()).decode()
-            return "\x1AL" + encoded_1 + "|" + encoded_2 + "\x1AL"
+            return "\x1aL" + encoded_1 + "|" + encoded_2 + "\x1aL"
 
         content = re.sub(r"\[(.*?)\]\((.*?)\)", encode_link, content)
 
     def encode_url(m):
         encoded = base64.b64encode(m.group(1).encode()).decode()
-        return "\x1AU" + encoded + "\x1AU"
+        return "\x1aU" + encoded + "\x1aU"
 
     # Encode URLs
     content = re.sub(
@@ -63,7 +63,7 @@ def format_content_html(content: str, allow_links: bool = False) -> str:
         return '<span class="pre pre--inline">' + decoded + "</span>"
 
     # Decode and process inline codeblocks
-    content = re.sub("\x1AI(.*?)\x1AI", decode_inline_codeblock, content)
+    content = re.sub("\x1aI(.*?)\x1aI", decode_inline_codeblock, content)
 
     # Decode and process links
     if allow_links:
@@ -74,14 +74,14 @@ def format_content_html(content: str, allow_links: bool = False) -> str:
             return '<a href="' + encoded_2 + '">' + encoded_1 + "</a>"
 
         # Potential bug, may need to change to: '\x1AL(.*?)\|(.*?)\x1AL'
-        content = re.sub("\x1AL(.*?)\\|(.*?)\x1AL", decode_link, content)
+        content = re.sub("\x1aL(.*?)\\|(.*?)\x1aL", decode_link, content)
 
     def decode_url(m):
         decoded = base64.b64decode(m.group(1).encode()).decode()
         return '<a href="' + decoded + '">' + decoded + "</a>"
 
     # Decode and process URLs
-    content = re.sub("\x1AU(.*?)\x1AU", decode_url, content)
+    content = re.sub("\x1aU(.*?)\x1aU", decode_url, content)
 
     # Process new lines
     content = content.replace("\n", "<br>")
@@ -99,7 +99,7 @@ def format_content_html(content: str, allow_links: bool = False) -> str:
         return f'<div class="pre pre--multiline {lang}">{result}' "</div>"
 
     # Decode and process multiline codeblocks
-    content = re.sub("\x1AM(.*?)\x1AM", decode_codeblock, content)
+    content = re.sub("\x1aM(.*?)\x1aM", decode_codeblock, content)
 
     # Meta mentions (@everyone)
     content = content.replace("@everyone", '<span class="mention">@everyone</span>')
