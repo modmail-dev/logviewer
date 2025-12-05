@@ -6,15 +6,16 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-jinja2 = "~=3.1.2"
-motor = "~=3.0"
+jinja2 = "~=3.1.4"
+motor = "~=3.4.0"
 natural = "~=0.2.0"
-pymongo = {version = "*", extras = ['srv']}  # Required by motor
+pymongo = {version = "~=4.6.1", extras = ['srv']}  # Required by motor
 python-dateutil = "~=2.8.2"
-sanic = "~=22.6.0"
+sanic = "~=23.12.0"
+aiofiles = "~=23.2.1"
 
 [scripts]
 logviewer = "python app.py"
 
 [requires]
-python_version = "3.9"
+python_version = "3.11"
