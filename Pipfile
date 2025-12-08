@@ -1,21 +1,20 @@
+# IMPORTANT: We are no longer using Pipfile for dependency management.
+# Please use pip with requirements.txt for installing dependencies.
+# This file is retained for backward compatibility only, and will be removed in future releases.
+
 [[source]]
 name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
 
-[dev-packages]
-
 [packages]
-jinja2 = "~=3.1.2"
-motor = "~=3.0"
-natural = "~=0.2.0"
-pymongo = {version = "*", extras = ['srv']}  # Required by motor
-python-dateutil = "~=2.8.2"
-python-dotenv = "~=0.18.0"
-sanic = "~=22.6.0"
+jinja2 = "==3.1.6"
+motor = "==3.7.1"
+natural = "==0.2.0"
+pymongo = "*"  # Required by motor
+dnspython = "*"  # Required for pymongo srv support
+python-dateutil = "==2.9.0.post0"
+sanic = "== 25.3.0"
 
 [scripts]
 logviewer = "python app.py"
-
-[requires]
-python_version = "3.9"
