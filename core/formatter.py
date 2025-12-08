@@ -96,7 +96,7 @@ def format_content_html(content: str, allow_links: bool = False) -> str:
             lang = lang.strip(" \n\r")
 
         result = html.escape(match.group(2))
-        return f'<div class="pre pre--multiline {lang}">{result}' "</div>"
+        return f'<div class="pre pre--multiline {html.escape(lang)}">{result}' "</div>" 
 
     # Decode and process multiline codeblocks
     content = re.sub("\x1AM(.*?)\x1AM", decode_codeblock, content)
