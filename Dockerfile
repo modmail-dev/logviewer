@@ -1,8 +1,11 @@
-FROM python:3.11-slim as py
+FROM python:3.12-trixie as py
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends g++ && \
+    rm -rf /var/lib/apt/lists/*
 
 FROM py as build
 
-RUN apt update && apt install -y g++
 COPY requirements.txt /
 RUN pip install --prefix=/inst -U -r /requirements.txt
 
@@ -14,4 +17,3 @@ COPY --from=build /inst /usr/local
 WORKDIR /logviewer
 CMD ["python", "app.py"]
 COPY . /logviewer
-
