@@ -1,4 +1,4 @@
-__version__ = "1.1.2"
+__version__ = "1.1.3"
 
 import html
 import os
@@ -110,6 +110,6 @@ async def get_logs_file(request, key):
 if __name__ == "__main__":
     app.run(
         host=os.getenv("HOST", "0.0.0.0"),
-        port=os.getenv("PORT", 8000),
+        port=int(os.getenv("PORT", 8000)),
         debug=bool(os.getenv("DEBUG", False)),
     )

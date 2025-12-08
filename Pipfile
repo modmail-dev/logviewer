@@ -14,6 +14,7 @@ natural = "==0.2.0"
 pymongo = "*"  # Required by motor
 dnspython = "*"  # Required for pymongo srv support
 python-dateutil = "==2.9.0.post0"
+python-dotenv = "==1.2.1"
 sanic = "== 25.3.0"
 
 [scripts]

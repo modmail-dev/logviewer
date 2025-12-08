@@ -5,4 +5,5 @@ pymongo == 4.15.5
 dnspython  # Required for pymongo srv support
 pymongo  # Required for motor
 python-dateutil == 2.9.0.post0
+python-dotenv == 1.2.1
 sanic == 25.3.0

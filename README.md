@@ -47,7 +47,7 @@ sudo apt install -y make build-essential libssl-dev zlib1g-dev \
   libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev libzstd-dev
 curl https://pyenv.run | bash
 
-# Add pyenv to bash so that it loads every time
+# Auto-loads pyenv every time you start a terminal session
 echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
 echo '[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
 echo 'eval "$(pyenv init - bash)"' >> ~/.bashrc
@@ -61,6 +61,7 @@ exec "$SHELL"
 # Install Python 3.12
 pyenv install 3.12
 pyenv global 3.12
+python -m pip install -U pip
 ```
 
 ### Deployment
@@ -71,10 +72,9 @@ Run the following shell commands:
 git clone https://github.com/modmail-dev/logviewer
 cd logviewer
 
-# Create and activate virtual environment (optional, but recommended)
-python3.12 -m pip install -U pip venv
-python3.12 -m venv .venv
-source .venv/bin/activate
+# Create and activate virtual environment (optional, but strongly recommended)
+python -m venv venv
+source venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
@@ -92,7 +92,7 @@ python app.py
 
 > [!NOTE]
 > If you are using a virtual environment, ensure you activate it every time you reconnect your terminal session before you run/update the logviewer.
-> You can do this by running `source .venv/bin/activate` in the logviewer directory.
+> You can do this by running `source venv/bin/activate` in the logviewer directory.
 
 You can verify the logviewer is working by navigating to `http://<IP_OF_SERVER>:8000` (if you didn't change the bind IP / port) and should be greeted with the Logviewer main page.
 
