@@ -6,14 +6,14 @@
     <a href="https://heroku.com/deploy?template=https://github.com/modmail-dev/logviewer">
       <img src="https://img.shields.io/badge/deploy_to-heroku-997FBC.svg?style=for-the-badge" alt="Deploy to Heroku"/>
     </a>
-    <a href="https://discord.gg/etJNHCQ">
-      <img src="https://img.shields.io/discord/515071617815019520.svg?label=Discord&logo=Discord&colorB=7289da&style=for-the-badge" alt="Discord">
+    <a href="https://discord.gg/zmdYe3ZVHG">
+      <img src="https://img.shields.io/discord/1079074933008781362?style=for-the-badge&logo=discord&logoColor=white&label=Discord&color=%235865F2" alt="Discord">
     </a>
     <a href="https://buymeacoffee.com/modmaildev">
       <img src="https://img.shields.io/badge/buymeacoffee-donate-ff813f.svg?style=for-the-badge&logo=buy-me-a-coffee" alt="Buy Me A Coffee">
     </a>
     <a href="https://www.python.org/downloads/">
-      <img src="https://img.shields.io/badge/Supports-Python%203.10%2D3.12-blue.svg?style=for-the-badge&logo=Python" alt="Supports Python 3.10-3.12">
+      <img src="https://img.shields.io/badge/Supports-Python%203.12-blue.svg?style=for-the-badge&logo=Python" alt="Supports Python 3.12">
     </a>
     <a href="https://github.com/psf/black">
       <img src="https://img.shields.io/badge/Code%20Style-Black-black?style=for-the-badge" alt="Coding Style Black">
