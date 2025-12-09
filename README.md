@@ -1,5 +1,5 @@
 <div align="center">
-    <h1>Modmail Log Viewer</h1>
+    <h1>Modmail Logviewer</h1>
     <strong><i>A simple webserver to view your self-hosted Modmail logs.</i></strong>
     <br />
     <br />
