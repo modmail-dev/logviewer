@@ -13,7 +13,7 @@
       <img src="https://img.shields.io/badge/buymeacoffee-donate-ff813f.svg?style=for-the-badge&logo=buy-me-a-coffee" alt="Buy Me A Coffee">
     </a>
     <a href="https://www.python.org/downloads/">
-      <img src="https://img.shields.io/badge/Supports-Python%203.12-blue.svg?style=for-the-badge&logo=Python" alt="Supports Python 3.12">
+      <img src="https://img.shields.io/badge/Python-3.12-blue.svg?style=for-the-badge&logo=Python" alt="Supports Python 3.12">
     </a>
     <a href="https://github.com/psf/black">
       <img src="https://img.shields.io/badge/Code%20Style-Black-black?style=for-the-badge" alt="Coding Style Black">
