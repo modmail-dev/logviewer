@@ -19,7 +19,7 @@
       <img src="https://img.shields.io/badge/Code%20Style-Black-black?style=for-the-badge" alt="Coding Style Black">
     </a>
     <a href="https://github.com/modmail-dev/logviewer/blob/master/LICENSE">
-      <img src="https://img.shields.io/badge/license-agpl-e74c3c.svg?style=for-the-badge" alt="GPLv3 License">
+      <img src="https://img.shields.io/badge/license-GPLv3-e74c3c.svg?style=for-the-badge" alt="GPLv3 License">
     </a>
 </div>
 
