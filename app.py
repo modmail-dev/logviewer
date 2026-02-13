@@ -3,13 +3,14 @@ __version__ = "1.1.3"
 import html
 import os
 
+from bson import ObjectId
 from dotenv import load_dotenv
-from motor.motor_asyncio import AsyncIOMotorClient
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorGridFSBucket
 from sanic import Sanic, response
 from sanic.exceptions import NotFound
 from jinja2 import Environment, FileSystemLoader
 
-from core.models import LogEntry
+from core.models import LogEntry, build_archive_lookup
 
 load_dotenv()
 
@@ -61,6 +62,15 @@ def strtobool(val):
         raise ValueError("invalid truth value %r" % (val,))
 
 
+SAVE_ATTACHMENTS = strtobool(os.getenv("SAVE_ATTACHMENTS", "no"))
+ARCHIVE_INTERVAL = int(os.getenv("ARCHIVE_INTERVAL", "600"))
+ARCHIVE_MAX_FILE_SIZE = int(os.getenv("ARCHIVE_MAX_FILE_SIZE", str(25 * 1024 * 1024)))
+ARCHIVE_RETENTION = os.getenv("ARCHIVE_RETENTION", "forever").strip().lower()
+ARCHIVE_COMPRESS_IMAGES = strtobool(os.getenv("ARCHIVE_COMPRESS_IMAGES", "yes"))
+ARCHIVE_IMAGE_QUALITY = int(os.getenv("ARCHIVE_IMAGE_QUALITY", "65"))
+ARCHIVE_IMAGE_MAX_RESOLUTION = int(os.getenv("ARCHIVE_IMAGE_MAX_RESOLUTION", "1920"))
+
+
 @app.listener("before_server_start")
 async def init(app, loop):
     app.ctx.db = AsyncIOMotorClient(MONGO_URI).modmail_bot
@@ -70,6 +80,32 @@ async def init(app, loop):
         app.ctx.attachment_proxy_url = html.escape(app.ctx.attachment_proxy_url).rstrip("/")
     else:
         app.ctx.attachment_proxy_url = None
+
+    # Attachment archival setup
+    app.ctx.save_attachments = bool(SAVE_ATTACHMENTS)
+    if app.ctx.save_attachments:
+        app.ctx.fs = AsyncIOMotorGridFSBucket(app.ctx.db, bucket_name="attachments")
+        await app.ctx.db.archived_attachments.create_index("original_url", unique=True)
+        await app.ctx.db.archived_attachments.create_index("status")
+        await app.ctx.db.archived_attachments.create_index("archived_at")
+    else:
+        app.ctx.fs = None
+
+
+@app.listener("after_server_start")
+async def start_archiver(app, loop):
+    if app.ctx.save_attachments:
+        from core.archiver import run_archiver_loop
+        archiver_config = {
+            "interval": ARCHIVE_INTERVAL,
+            "max_file_size": ARCHIVE_MAX_FILE_SIZE,
+            "retention": ARCHIVE_RETENTION,
+            "compress_images": bool(ARCHIVE_COMPRESS_IMAGES),
+            "image_quality": ARCHIVE_IMAGE_QUALITY,
+            "image_max_resolution": ARCHIVE_IMAGE_MAX_RESOLUTION,
+        }
+        app.add_task(run_archiver_loop(app, archiver_config))
+
 
 @app.exception(NotFound)
 async def not_found(request, exc):
@@ -89,7 +125,8 @@ async def get_raw_logs_file(request, key):
     if document is None:
         raise NotFound
 
-    log_entry = LogEntry(app, document)
+    archive_lookup = await build_archive_lookup(app, document)
+    log_entry = LogEntry(app, document, archive_lookup=archive_lookup)
 
     return log_entry.render_plain_text()
 
@@ -102,9 +139,41 @@ async def get_logs_file(request, key):
     if document is None:
         raise NotFound
 
-    log_entry = LogEntry(app, document)
+    archive_lookup = await build_archive_lookup(app, document)
+    log_entry = LogEntry(app, document, archive_lookup=archive_lookup)
 
     return log_entry.render_html()
+
+
+@app.get("/attachments/<file_id>/<filename>")
+async def serve_attachment(request, file_id, filename):
+    """Serve an archived attachment from GridFS."""
+    if not app.ctx.save_attachments or app.ctx.fs is None:
+        raise NotFound
+
+    try:
+        oid = ObjectId(file_id)
+    except Exception:
+        raise NotFound
+
+    try:
+        grid_out = await app.ctx.fs.open_download_stream(oid)
+    except Exception:
+        raise NotFound
+
+    content_type = "application/octet-stream"
+    if grid_out.metadata:
+        content_type = grid_out.metadata.get("content_type", content_type)
+
+    data = await grid_out.read()
+    return response.raw(
+        data,
+        content_type=content_type,
+        headers={
+            "Content-Disposition": f'inline; filename="{filename}"',
+            "Cache-Control": "public, max-age=31536000, immutable",
+        },
+    )
 
 
 if __name__ == "__main__":

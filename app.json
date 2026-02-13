@@ -16,6 +16,31 @@
             "description": "Proxy URL for viewing attachments.",
             "required": false,
             "value": "https://cdn.discordapp.xyz"
+        },
+        "SAVE_ATTACHMENTS": {
+            "description": "Whether to archive attachments to MongoDB GridFS. Set to 'yes' to enable.",
+            "required": false,
+            "value": "no"
+        },
+        "ARCHIVE_INTERVAL": {
+            "description": "How often (in seconds) to scan for unarchived attachments. Default: 600",
+            "required": false,
+            "value": "600"
+        },
+        "ARCHIVE_RETENTION": {
+            "description": "How long to keep archived attachments. Options: 1w, 1month, 1y, forever. Default: forever",
+            "required": false,
+            "value": "forever"
+        },
+        "ARCHIVE_COMPRESS_IMAGES": {
+            "description": "Compress images to JPEG before storing to save space. Default: yes",
+            "required": false,
+            "value": "yes"
+        },
+        "ARCHIVE_IMAGE_QUALITY": {
+            "description": "JPEG quality (1-100). Lower = smaller files. Default: 65",
+            "required": false,
+            "value": "65"
         }
     }
 }

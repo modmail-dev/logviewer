@@ -110,6 +110,51 @@ We recommend setting up a reverse proxy (e.g. Nginx) to port forward external po
 
 To accept requests from a domain instead of your server IP, simply set an `A`/`AAAA` record from your DNS provider to forward your domain to your server IP.
 
+## Preserving Attachments
+
+Discord's CDN URLs for attachments expire after ~24 hours, which means images in your logs will break. There are two ways to fix this:
+
+### Option 1: Attachment Archival (Recommended)
+
+Downloads attachments and stores them directly in your MongoDB using GridFS. No third parties involved.
+
+Add to your `.env` file:
+```
+SAVE_ATTACHMENTS=yes
+```
+
+| Variable | Default | Description |
+|---|---|---|
+| `SAVE_ATTACHMENTS` | `no` | Enable attachment archival (`yes` / `no`) |
+| `ARCHIVE_INTERVAL` | `600` | Seconds between scans for new attachments |
+| `ARCHIVE_MAX_FILE_SIZE` | `26214400` | Max file size in bytes to archive (default 25 MB) |
+| `ARCHIVE_RETENTION` | `forever` | How long to keep files: `1w`, `1month`, `1y`, `forever` |
+| `ARCHIVE_COMPRESS_IMAGES` | `yes` | Compress images to JPEG before storing (`yes` / `no`) |
+| `ARCHIVE_IMAGE_QUALITY` | `65` | JPEG quality 1-100 (lower = smaller files) |
+| `ARCHIVE_IMAGE_MAX_RESOLUTION` | `1920` | Downscale images larger than this (longest edge in px) |
+
+A background task scans your logs collection periodically and downloads any Discord CDN attachment/avatar URLs it finds. Images are compressed to JPEG (configurable) and stored in MongoDB GridFS. When a log page is viewed, archived images are served from `/attachments/` instead of the expired Discord URLs.
+
+> [!NOTE]
+> Attachments that already expired before enabling this feature cannot be recovered. Enable it as soon as possible to archive existing logs while their URLs are still valid.
+
+> [!NOTE]
+> The free MongoDB Atlas tier (M0) has a 512 MB storage limit. With compression enabled, this can hold roughly 2,000-10,000 images depending on size. Consider adjusting `ARCHIVE_IMAGE_QUALITY` and `ARCHIVE_IMAGE_MAX_RESOLUTION` to reduce storage usage, or use a paid tier for more space.
+
+### Option 2: Attachment Proxy
+
+Routes image requests through a third-party proxy service instead of storing them yourself. Simpler setup but relies on an external service.
+
+| Variable | Default | Description |
+|---|---|---|
+| `USE_ATTACHMENT_PROXY` | `no` | Enable the attachment proxy (`yes` / `no`) |
+| `ATTACHMENT_PROXY_URL` | `https://cdn.discordapp.xyz` | The proxy service URL (not your site URL) |
+
+> [!WARNING]
+> The proxy service is not affiliated with Modmail. It will have full access to your attachments. Use at your own risk.
+
+You can enable both options together - archived images take priority, and the proxy is used as a fallback for images not yet archived.
+
 ## Discord OAuth2
 
 Protecting your logs with a login (Discord Oauth2 support) is a premium feature, only available to [Premium members](https://buymeacoffee.com/modmaildev).

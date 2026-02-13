@@ -1,15 +1,74 @@
+import re
 from datetime import datetime, timezone
-import dateutil.parser
 
+import dateutil.parser
 from sanic import response
 from natural.date import duration
 
 from .formatter import format_content_html
 
+_DISCORD_CDN_PATTERN = re.compile(
+    r"https?://(?:cdn\.discordapp\.com|media\.discordapp\.net)/"
+)
+
+
+async def build_archive_lookup(app, document):
+    """
+    Pre-fetch all archived attachment mappings for URLs found in this log document.
+    Returns a dict mapping canonical_url -> "/attachments/<gridfs_id>/<filename>"
+    """
+    if not getattr(app.ctx, "save_attachments", False):
+        return {}
+
+    urls = set()
+
+    for message in document.get("messages", []):
+        for att in message.get("attachments", []):
+            if isinstance(att, str):
+                url = att
+            elif isinstance(att, dict):
+                url = att.get("url", "")
+            else:
+                continue
+            if url and _DISCORD_CDN_PATTERN.match(url):
+                urls.add(url.split("?")[0])
+
+    for field in ("creator", "recipient", "closer"):
+        user_data = document.get(field)
+        if user_data and isinstance(user_data, dict):
+            avatar_url = user_data.get("avatar_url", "")
+            if avatar_url and _DISCORD_CDN_PATTERN.match(avatar_url):
+                urls.add(avatar_url.split("?")[0])
+
+    for message in document.get("messages", []):
+        author = message.get("author")
+        if author and isinstance(author, dict):
+            avatar_url = author.get("avatar_url", "")
+            if avatar_url and _DISCORD_CDN_PATTERN.match(avatar_url):
+                urls.add(avatar_url.split("?")[0])
+
+    if not urls:
+        return {}
+
+    cursor = app.ctx.db.archived_attachments.find(
+        {"original_url": {"$in": list(urls)}, "status": "archived"},
+        {"original_url": 1, "gridfs_id": 1, "filename": 1},
+    )
+
+    lookup = {}
+    async for record in cursor:
+        original_url = record["original_url"]
+        gridfs_id = str(record["gridfs_id"])
+        filename = record.get("filename", "attachment")
+        lookup[original_url] = f"/attachments/{gridfs_id}/{filename}"
+
+    return lookup
+
 
 class LogEntry:
-    def __init__(self, app, data):
+    def __init__(self, app, data, archive_lookup=None):
         self.app = app
+        self.archive_lookup = archive_lookup or {}
         self.key = data["key"]
         self.open = data["open"]
         self.created_at = dateutil.parser.parse(data["created_at"]).astimezone(timezone.utc)
@@ -19,11 +78,11 @@ class LogEntry:
         )
         self.channel_id = int(data["channel_id"])
         self.guild_id = int(data["guild_id"])
-        self.creator = User(app, data["creator"])
-        self.recipient = User(app, data["recipient"])
-        self.closer = User(app, data["closer"]) if not self.open else None
+        self.creator = User(app, data["creator"], archive_lookup=self.archive_lookup)
+        self.recipient = User(app, data["recipient"], archive_lookup=self.archive_lookup)
+        self.closer = User(app, data["closer"], archive_lookup=self.archive_lookup) if not self.open else None
         self.close_message = format_content_html(data.get("close_message") or "")
-        self.messages = [Message(app, m) for m in data["messages"]]
+        self.messages = [Message(app, m, archive_lookup=self.archive_lookup) for m in data["messages"]]
         self.internal_messages = [m for m in self.messages if m.type == "internal"]
         self.thread_messages = [
             m for m in self.messages if m.type not in ("internal", "system")
@@ -112,13 +171,18 @@ class LogEntry:
 
 
 class User:
-    def __init__(self, app, data):
+    def __init__(self, app, data, archive_lookup=None):
         self.app = app
         self.id = int(data.get("id"))
         self.name = data["name"]
         self.discriminator = data["discriminator"]
         self.avatar_url = data["avatar_url"]
         self.mod = data["mod"]
+
+        if archive_lookup:
+            canonical = self.avatar_url.split("?")[0]
+            if canonical in archive_lookup:
+                self.avatar_url = archive_lookup[canonical]
 
     @property
     def default_avatar_url(self):
@@ -148,7 +212,7 @@ class MessageGroup:
 
 
 class Attachment:
-    def __init__(self, app, data):
+    def __init__(self, app, data, archive_lookup=None):
         self.app = app
         if isinstance(data, str):  # Backwards compatibility
             self.id = 0
@@ -162,22 +226,30 @@ class Attachment:
             self.url = data["url"]
             self.is_image = data["is_image"]
             self.size = data["size"]
+
+        # Check archive first (takes priority over proxy)
+        if archive_lookup:
+            canonical = self.url.split("?")[0]
+            if canonical in archive_lookup:
+                self.url = archive_lookup[canonical]
+                return
+
+        # Fall back to attachment proxy if configured
         if self.app.ctx.attachment_proxy_url is not None:
             self.url = self.url.replace("https://cdn.discordapp.com", self.app.ctx.attachment_proxy_url)
             self.url = self.url.replace("https://media.discordapp.net", self.app.ctx.attachment_proxy_url)
-            print(self.url)
 
 
 class Message:
-    def __init__(self, app, data):
+    def __init__(self, app, data, archive_lookup=None):
         self.app = app
         self.id = int(data["message_id"])
         self.created_at = dateutil.parser.parse(data["timestamp"]).astimezone(timezone.utc)
         self.human_created_at = duration(self.created_at, now=datetime.now(timezone.utc))
         self.raw_content = data["content"]
         self.content = self.format_html_content(self.raw_content)
-        self.attachments = [Attachment(app, a) for a in data["attachments"]]
-        self.author = User(app, data["author"])
+        self.attachments = [Attachment(app, a, archive_lookup=archive_lookup) for a in data["attachments"]]
+        self.author = User(app, data["author"], archive_lookup=archive_lookup)
         self.type = data.get("type", "thread_message")
         self.edited = data.get("edited", False)
 

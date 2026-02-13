@@ -1,4 +1,6 @@
+aiohttp == 3.11.18
 jinja2 == 3.1.6
+Pillow == 11.1.0
 motor == 3.7.1
 natural == 0.2.0
 pymongo == 4.15.5
